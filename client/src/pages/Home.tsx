@@ -17,6 +17,7 @@ import {
   Sparkles, FileText, Headphones, Clock, MapPin, User
 } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import InusCardPopup from "@/components/InusCardPopup";
 
 /* ─── Image URLs ─── */
 const IMAGES = {
@@ -354,9 +355,21 @@ function SingerSlider({ singers }: { singers: typeof SINGER_PROFILES }) {
 }
 
 /* ─── Navigation ─── */
+const SERVICE_DROPDOWN = [
+  { label: "결혼식사회", href: "https://inusmusic.kr/" },
+  { label: "클래식연주", href: "https://inusclassic.kr/" },
+  { label: "재즈연주", href: "https://inusjazz.kr/" },
+  { label: "뮤지컬웨딩", href: "https://inusmw.kr/" },
+  { label: "모바일청첩장", href: "https://inuscard.com/" },
+  { label: "완성패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
+];
+
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [serviceOpen, setServiceOpen] = useState(false);
+  const [mobileServiceOpen, setMobileServiceOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
@@ -364,12 +377,22 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
+  // 드롭다운 외부 클릭 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setServiceOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const navItems = [
     { label: "메인", href: "#hero" },
     { label: "소개", href: "#intro" },
     { label: "싱어", href: "#singer-profiles" },
     { label: "영상", href: "#video" },
-    { label: "서비스", href: "#additional-options" },
     { label: "후기", href: "#reviews" },
     { label: "견적", href: "#pricing" },
   ];
@@ -390,6 +413,40 @@ function Navbar() {
               {item.label}
             </a>
           ))}
+          {/* 서비스 드롭다운 */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setServiceOpen((v) => !v)}
+              className={`flex items-center gap-1 text-sm transition-colors ${scrolled ? "text-gray-600 hover:text-gray-900" : "text-white/80 hover:text-white"}`}
+            >
+              서비스
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${serviceOpen ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence>
+              {serviceOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                  className="absolute top-full right-0 mt-2 w-44 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden"
+                >
+                  {SERVICE_DROPDOWN.map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setServiceOpen(false)}
+                      className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <a
             href={LINKS.kakao}
             target="_blank"
@@ -402,7 +459,7 @@ function Navbar() {
         </div>
         {/* Mobile menu button */}
         <button
-          className="md:hidden flex flex-col gap-1.5 items-center justify-center w-10 h-10 rounded-full animate-[pulse_2s_ease-in-out_3]"
+          className="md:hidden flex flex-col gap-1.5 items-center justify-center w-10 h-10 rounded-full"
           style={{ backgroundColor: MINT }}
           onClick={() => setMobileOpen(!mobileOpen)}
         >
@@ -425,6 +482,32 @@ function Navbar() {
                 {item.label}
               </a>
             ))}
+            {/* 모바일 서비스 드롭다운 */}
+            <div>
+              <button
+                onClick={() => setMobileServiceOpen((v) => !v)}
+                className="w-full flex items-center justify-between px-6 py-3 text-sm text-gray-700 hover:bg-gray-50"
+              >
+                서비스
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${mobileServiceOpen ? "rotate-180" : ""}`} />
+              </button>
+              {mobileServiceOpen && (
+                <div className="bg-gray-50 border-t border-gray-100">
+                  {SERVICE_DROPDOWN.map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => { setMobileOpen(false); setMobileServiceOpen(false); }}
+                      className="flex items-center px-10 py-2.5 text-sm text-gray-600 hover:text-gray-900"
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
             <a
               href={LINKS.kakao}
               target="_blank"
@@ -505,6 +588,7 @@ export default function Home() {
     <div className="min-h-screen">
       <Navbar />
       <FloatingButtons />
+      <InusCardPopup />
 
       {/* ═══ HERO SECTION ═══ */}
       <section id="hero" className="relative h-screen min-h-[700px] overflow-hidden">
@@ -1464,12 +1548,12 @@ export default function Home() {
           <AnimatedSection delay={0.1}>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
               {[
-                { title: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
+                { title: "결혼식 사회", href: "https://inusmc.co.kr/" },
                 { title: "클래식 연주", href: "https://inusclassic.kr/" },
                 { title: "재즈 연주", href: "https://inusjazz.kr/" },
-                { title: "중창 팝페라", href: "https://blog.naver.com/inusmusics/220622621535" },
                 { title: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
-                { title: "사회자", href: "https://inusmc.co.kr/" },
+                { title: "모바일 청첩장", href: "https://inuscard.com/" },
+                { title: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
               ].map((item, i) => (
                 <a
                   key={i}
