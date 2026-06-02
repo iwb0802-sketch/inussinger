@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { X, ChevronDown, ChevronUp, Gift } from "lucide-react";
 
-const POPUP_IMG = "/images/popup-inuscard.png";
+const POPUP_IMG = "/manus-storage/pasted_file_A6Xo3i_image_26c1cdc0.png";
 const INUSCARD_URL = "https://inuscard.com";
 const STORAGE_KEY = "inuscard_popup_closed";
 
