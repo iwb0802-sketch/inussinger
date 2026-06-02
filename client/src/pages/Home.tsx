@@ -356,7 +356,7 @@ function SingerSlider({ singers }: { singers: typeof SINGER_PROFILES }) {
 
 /* ─── Navigation ─── */
 const SERVICE_DROPDOWN = [
-  { label: "결혼식사회", href: "https://inusmusic.kr/" },
+  { label: "결혼식사회", href: "https://www.inusmc.co.kr/" },
   { label: "클래식연주", href: "https://inusclassic.kr/" },
   { label: "재즈연주", href: "https://inusjazz.kr/" },
   { label: "뮤지컬웨딩", href: "https://inusmw.kr/" },
@@ -1553,7 +1553,7 @@ export default function Home() {
           <AnimatedSection delay={0.1}>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
               {[
-                { title: "결혼식 사회", href: "https://inusmc.co.kr/" },
+                { title: "결혼식 사회", href: "https://www.inusmc.co.kr/" },
                 { title: "클래식 연주", href: "https://inusclassic.kr/" },
                 { title: "재즈 연주", href: "https://inusjazz.kr/" },
                 { title: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
