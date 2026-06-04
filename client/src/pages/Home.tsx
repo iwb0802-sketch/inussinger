@@ -63,7 +63,7 @@ const SONGS = [
 
 /* ─── Video Links (수정: 첫번째 영상 링크 교체) ─── */
 const VIDEOS = [
-  { url: "https://youtu.be/MGWh3EjxD6g?si=oemLT5FuH_qEIUsr", id: "MGWh3EjxD6g", label: "축가 영상 1" },
+  { url: "https://youtu.be/_myxQGKKK2U", id: "_myxQGKKK2U", label: "축가 영상 1" },
   { url: "https://youtu.be/XCfVOudIBlQ?si=V00v6zWX5YPJlbbd", id: "XCfVOudIBlQ", label: "축가 영상 2" },
   { url: "https://youtu.be/Oq3INO5PIsU?si=e6yWxdrYW_Y3CtOS", id: "Oq3INO5PIsU", label: "축가 영상 3" },
 ];
