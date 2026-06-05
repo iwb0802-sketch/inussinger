@@ -86,6 +86,7 @@ const SINGER_PROFILES: { name: string; career: string; desc: string; image: stri
   { name: "박달해", career: "축가 400회 이상", desc: "따뜻한 음색으로 하객의 마음을 사로잡는 싱어", image: "/images/singer_parkdalhae_2db130ed.jpg", profileUrl: "https://blog.naver.com/inusmusics/220678041150", grade: "premium" },
   { name: "이윤주", career: "축가 400회 이상", desc: "다채로운 장르를 소화하는 실력파 싱어", image: "/images/singer_leeyunju_af81750f.jpg", profileUrl: "https://blog.naver.com/inusmusics/223660600728", grade: "best" },
   { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard" },
+  { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium" },
 ];
 
 /* ─── Animated Section ─── */
