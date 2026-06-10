@@ -80,14 +80,22 @@ const REVIEW_IMAGES: string[] = [
 ];
 
 /* ─── Singer Profiles ─── */
-const SINGER_PROFILES: { name: string; career: string; desc: string; image: string; profileUrl: string; grade: "premium" | "best" | "standard" }[] = [
-  { name: "김영일", career: "축가 400회 이상", desc: "부드럽고 섬세한 음색의 감성 보컬", image: "/images/singer_kimyoungil_787db8ce.jpg", profileUrl: "https://blog.naver.com/inusmusics/220681337963", grade: "best" },
-  { name: "제은빈", career: "축가 500회 이상", desc: "풍부한 경험과 안정적인 라이브로 사랑받는 싱어", image: "/images/singer_jeeunbin_9523ebe9.jpg", profileUrl: "https://blog.naver.com/inusmusics/223539681185", grade: "premium" },
-  { name: "박달해", career: "축가 400회 이상", desc: "따뜻한 음색으로 하객의 마음을 사로잡는 싱어", image: "/images/singer_parkdalhae_2db130ed.jpg", profileUrl: "https://blog.naver.com/inusmusics/220678041150", grade: "premium" },
-  { name: "이윤주", career: "축가 400회 이상", desc: "다채로운 장르를 소화하는 실력파 싱어", image: "/images/singer_leeyunju_af81750f.jpg", profileUrl: "https://blog.naver.com/inusmusics/223660600728", grade: "best" },
-  { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard" },
-  { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium" },
-  { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "standard" },
+const SINGER_PROFILES: { name: string; career: string; desc: string; image: string; profileUrl: string; grade: "premium" | "best" | "standard"; styles: string[] }[] = [
+  { name: "김영일", career: "축가 400회 이상", desc: "부드럽고 섬세한 음색의 감성 보컬", image: "/images/singer_kimyoungil_787db8ce.jpg", profileUrl: "https://blog.naver.com/inusmusics/220681337963", grade: "best", styles: ["감성형", "가창력형"] },
+  { name: "제은빈", career: "축가 500회 이상", desc: "풍부한 경험과 안정적인 라이브로 사랑받는 싱어", image: "/images/singer_jeeunbin_9523ebe9.jpg", profileUrl: "https://blog.naver.com/inusmusics/223539681185", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
+  { name: "박달해", career: "축가 400회 이상", desc: "따뜻한 음색으로 하객의 마음을 사로잡는 싱어", image: "/images/singer_parkdalhae_2db130ed.jpg", profileUrl: "https://blog.naver.com/inusmusics/220678041150", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
+  { name: "이윤주", career: "축가 400회 이상", desc: "다채로운 장르를 소화하는 실력파 싱어", image: "/images/singer_leeyunju_af81750f.jpg", profileUrl: "https://blog.naver.com/inusmusics/223660600728", grade: "best", styles: ["감성형", "뮤지컬형"] },
+  { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard", styles: ["감동형", "감성형", "가창력형"] },
+  { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
+  { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "standard", styles: ["감성형", "가창력형"] },
+];
+
+const SINGER_STYLE_FILTERS = [
+  { key: "전체", label: "전체", desc: "" },
+  { key: "감동형", label: "감동형", desc: "진한 감성과 몰입감 있는 무대" },
+  { key: "감성형", label: "감성형", desc: "편안하고 자연스러운 분위기" },
+  { key: "가창력형", label: "가창력형", desc: "폭발적인 성량과 안정적인 라이브" },
+  { key: "뮤지컬형", label: "뮤지컬형", desc: "드라마틱한 표현력과 무대장악력" },
 ];
 
 /* ─── Animated Section ─── */
@@ -199,6 +207,55 @@ function ReviewSlider({ images }: { images: string[] }) {
       <p className="text-center text-xs text-gray-400 pb-3">
         {current + 1} / {images.length}
       </p>
+    </div>
+  );
+}
+
+/* ─── Singer Style Filter + Slider ─── */
+function SingerStyleFilter() {
+  const [activeStyle, setActiveStyle] = useState("전체");
+  const filtered = activeStyle === "전체"
+    ? SINGER_PROFILES
+    : SINGER_PROFILES.filter((s) => s.styles.includes(activeStyle));
+  const activeFilter = SINGER_STYLE_FILTERS.find((f) => f.key === activeStyle);
+
+  return (
+    <div>
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap justify-center gap-2 mb-6">
+        {SINGER_STYLE_FILTERS.map((f) => (
+          <button
+            key={f.key}
+            onClick={() => setActiveStyle(f.key)}
+            className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+            style={{
+              backgroundColor: activeStyle === f.key ? MINT : "rgba(255,255,255,0.08)",
+              color: activeStyle === f.key ? "#fff" : "rgba(255,255,255,0.6)",
+              border: activeStyle === f.key ? `1.5px solid ${MINT}` : "1.5px solid rgba(255,255,255,0.15)",
+            }}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+      {/* Style Description */}
+      {activeFilter && activeFilter.desc && (
+        <p className="text-center text-xs mb-8" style={{ color: MINT }}>
+          {activeFilter.desc}
+        </p>
+      )}
+      {/* Slider */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeStyle}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+        >
+          <SingerSlider singers={filtered} />
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
@@ -942,9 +999,9 @@ export default function Home() {
             </p>
           </AnimatedSection>
 
-          {/* Singer Slider */}
-          <AnimatedSection delay={0.2}>
-            <SingerSlider singers={SINGER_PROFILES} />
+          {/* Style Filter Tabs */}
+          <AnimatedSection delay={0.1}>
+            <SingerStyleFilter />
           </AnimatedSection>
 
           {/* 싱어 등급별 카드 (사진과 구분) */}
