@@ -222,14 +222,14 @@ function SingerStyleFilter() {
   return (
     <div>
       {/* Filter Tabs */}
-      <div className="flex gap-1 mb-6 w-full">
+      <div className="grid mb-6 w-full" style={{ gridTemplateColumns: 'repeat(5, 1fr)', gap: '4px' }}>
         {SINGER_STYLE_FILTERS.map((f) => (
           <button
             key={f.key}
             onClick={() => setActiveStyle(f.key)}
-            className="flex-1 py-1.5 rounded-full font-medium transition-all duration-200 min-w-0 text-center"
+            className="py-1.5 rounded-full font-medium transition-all duration-200 w-full text-center"
             style={{
-              fontSize: '11px',
+              fontSize: '10.5px',
               backgroundColor: activeStyle === f.key ? MINT : "rgba(255,255,255,0.08)",
               color: activeStyle === f.key ? "#fff" : "rgba(255,255,255,0.6)",
               border: activeStyle === f.key ? `1.5px solid ${MINT}` : "1.5px solid rgba(255,255,255,0.15)",
