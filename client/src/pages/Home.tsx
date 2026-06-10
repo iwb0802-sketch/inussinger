@@ -222,12 +222,12 @@ function SingerStyleFilter() {
   return (
     <div>
       {/* Filter Tabs */}
-      <div className="flex flex-wrap justify-center gap-2 mb-6">
+      <div className="flex overflow-x-auto gap-2 mb-6 pb-1 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
         {SINGER_STYLE_FILTERS.map((f) => (
           <button
             key={f.key}
             onClick={() => setActiveStyle(f.key)}
-            className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+            className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex-shrink-0"
             style={{
               backgroundColor: activeStyle === f.key ? MINT : "rgba(255,255,255,0.08)",
               color: activeStyle === f.key ? "#fff" : "rgba(255,255,255,0.6)",
