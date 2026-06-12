@@ -81,12 +81,12 @@ const REVIEW_IMAGES: string[] = [
 ];
 
 /* ─── Singer Profiles ─── */
-const SINGER_PROFILES: { name: string; career: string; desc: string; image: string; profileUrl: string; grade: "premium" | "best" | "standard"; styles: string[] }[] = [
+const SINGER_PROFILES: { name: string; career: string; desc: string; image: string; profileUrl: string; grade: "premium" | "best" | "standard"; styles: string[]; videoId?: string }[] = [
   { name: "김영일", career: "축가 400회 이상", desc: "부드럽고 섬세한 음색의 감성 보컬", image: "/images/singer_kimyoungil_787db8ce.jpg", profileUrl: "https://blog.naver.com/inusmusics/220681337963", grade: "best", styles: ["감성형", "가창력형"] },
   { name: "제은빈", career: "축가 500회 이상", desc: "풍부한 경험과 안정적인 라이브로 사랑받는 싱어", image: "/images/singer_jeeunbin_9523ebe9.jpg", profileUrl: "https://blog.naver.com/inusmusics/223539681185", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
   { name: "박달해", career: "축가 400회 이상", desc: "따뜻한 음색으로 하객의 마음을 사로잡는 싱어", image: "/images/singer_parkdalhae_2db130ed.jpg", profileUrl: "https://blog.naver.com/inusmusics/220678041150", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
   { name: "이윤주", career: "축가 400회 이상", desc: "다채로운 장르를 소화하는 실력파 싱어", image: "/images/singer_leeyunju_af81750f.jpg", profileUrl: "https://blog.naver.com/inusmusics/223660600728", grade: "best", styles: ["감성형", "뮤지컬형"] },
-  { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard", styles: ["감동형", "감성형", "가창력형"] },
+  { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard", styles: ["감동형", "감성형", "가창력형"], videoId: "Oq3INO5PIsU" },
   { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
   { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "standard", styles: ["감성형", "가창력형"] },
 ];
@@ -375,15 +375,28 @@ function SingerStyleFilter() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col md:flex-row">
-                {/* Image */}
+                {/* Image or Video */}
                 <div className="relative w-full md:w-5/12 aspect-[3/4] md:aspect-auto md:min-h-[420px] overflow-hidden flex-shrink-0">
-                  <img
-                    src={selectedSinger.image}
-                    alt={selectedSinger.name}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  {selectedSinger.grade && (
+                  {selectedSinger.videoId ? (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${selectedSinger.videoId}?autoplay=1&mute=0&rel=0&modestbranding=1`}
+                      title={`${selectedSinger.name} 축가 영상`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 w-full h-full"
+                      style={{ border: 'none' }}
+                    />
+                  ) : (
+                    <>
+                      <img
+                        src={selectedSinger.image}
+                        alt={selectedSinger.name}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    </>
+                  )}
+                  {!selectedSinger.videoId && selectedSinger.grade && (
                     <span
                       className="absolute top-4 left-4 px-3 py-1.5 text-xs font-bold rounded-lg shadow-lg"
                       style={{
