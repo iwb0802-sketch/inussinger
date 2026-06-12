@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import InusCardPopup from "@/components/InusCardPopup";
+import FloatingButtonsNew from "@/components/FloatingButtons";
 
 /* ─── Image URLs ─── */
 const IMAGES = {
@@ -589,70 +590,14 @@ function Navbar() {
   );
 }
 
-/* ─── 하단 고정 CTA 바 (trust 섹션부터 표시) ─── */
-function FloatingButtons() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const heroSection = document.getElementById('hero');
-      if (heroSection) {
-        const rect = heroSection.getBoundingClientRect();
-        setVisible(rect.bottom <= 0);
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-3 pt-2"
-          style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.9) 70%, transparent)' }}
-        >
-          <div className="flex gap-2.5 max-w-sm mx-auto">
-            {/* 왼쪽: 싱어 프로필 보기 */}
-            <a
-              href="#singer-profiles"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg font-semibold text-xs transition-all duration-300 hover:scale-[1.02] active:scale-95"
-              style={{ backgroundColor: DARK_BG, border: `1.5px solid ${MINT}`, color: MINT }}
-            >
-              <Mic className="w-4 h-4" />
-              싱어 프로필 보기
-            </a>
-            {/* 오른쪽: 카카오톡 상담 */}
-            <a
-              href={LINKS.kakao}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg font-semibold text-xs transition-all duration-300 hover:scale-[1.02] active:scale-95"
-              style={{ backgroundColor: '#FEE500', color: '#3C1E1E' }}
-            >
-              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="#3C1E1E">
-                <path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.56-.96 3.58-1 3.73 0 .07.03.14.09.18.04.02.08.03.12.03.06 0 .12-.03.17-.07.62-.45 3.6-2.47 4.17-2.87.58.08 1.18.13 1.79.13 5.52 0 10-3.58 10-7.94S17.52 3 12 3z"/>
-              </svg>
-              카카오톡 상담
-            </a>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
+/* FloatingButtons 는 @/components/FloatingButtons 에서 import */
 
 /* ─── Main Page ─── */
 export default function Home() {
   return (
     <div className="min-h-screen">
       <Navbar />
-      <FloatingButtons />
+      <FloatingButtonsNew />
       <InusCardPopup />
 
       {/* ═══ HERO SECTION ═══ */}
