@@ -103,16 +103,20 @@ export default function FloatingButtons() {
           href="https://blog.naver.com/PostThumbnailList.nhn?blogId=inusmusics&from=postList&categoryNo=32"
           target="_blank"
           rel="noopener noreferrer"
-          className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-3 bg-[#2c1810]/90 backdrop-blur-sm border border-[#c9a96e]/30 text-[#f8f4ef] hover:bg-[#2c1810] hover:border-[#c9a96e]/60 transition-all duration-300 shadow-lg shadow-black/20 group shrink-0`}
+          className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-3 backdrop-blur-sm border transition-all duration-300 shadow-lg group shrink-0`}
+          style={{ backgroundColor: 'rgba(26,26,26,0.92)', borderColor: 'rgba(91,188,180,0.35)', color: '#e8f8f7' }}
         >
-          <Play className="w-4 h-4 text-[#c9a96e] group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
+          <Play className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} style={{ color: '#5BBCB4' }} />
           <span className="text-xs tracking-wide" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
             실황영상보기
           </span>
         </a>
 
         {/* 가운데: SNS 아이콘 */}
-        <div className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-0 bg-[#2c1810]/90 backdrop-blur-sm border border-[#c9a96e]/30 shadow-lg shadow-black/20 shrink-0`}>
+        <div
+          className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-0 backdrop-blur-sm border shadow-lg shrink-0`}
+          style={{ backgroundColor: 'rgba(26,26,26,0.92)', borderColor: 'rgba(91,188,180,0.35)' }}
+        >
           {snsLinks.map((sns, i) => (
             <a
               key={sns.label}
@@ -120,9 +124,10 @@ export default function FloatingButtons() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={sns.label}
-              className={`flex items-center justify-center w-11 h-full text-[#c9a96e]/70 hover:text-[#c9a96e] hover:bg-[#2c1810] transition-all duration-200 active:scale-95 ${
-                i < snsLinks.length - 1 ? "border-r border-[#c9a96e]/15" : ""
+              className={`flex items-center justify-center w-11 h-full transition-all duration-200 active:scale-95 ${
+                i < snsLinks.length - 1 ? "border-r" : ""
               }`}
+              style={{ color: 'rgba(91,188,180,0.7)', borderColor: 'rgba(91,188,180,0.15)' }}
             >
               {sns.isLucide
                 ? <sns.icon className="w-[13px] h-[13px]" strokeWidth={1.5} />
@@ -137,7 +142,8 @@ export default function FloatingButtons() {
           href="https://pf.kakao.com/_wxovaM/chat"
           target="_blank"
           rel="noopener noreferrer"
-          className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-3 bg-[#5BBCB4] text-white hover:bg-[#4aaba3] transition-all duration-300 shadow-lg shadow-black/20 group shrink-0`}
+          className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-3 transition-all duration-300 shadow-lg group shrink-0`}
+          style={{ backgroundColor: '#5BBCB4', color: '#fff' }}
         >
           <MessageCircle className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
           <span className="text-xs tracking-wide font-medium" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
