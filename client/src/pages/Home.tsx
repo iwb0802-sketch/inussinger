@@ -263,6 +263,29 @@ function SingerStyleFilter() {
         ))}
       </div>
 
+      {/* 필터 설명 리스트 */}
+      <div className="flex flex-wrap justify-end gap-x-4 gap-y-1 mb-6 -mt-4">
+        {SINGER_STYLE_FILTERS.filter((f) => f.desc).map((f) => (
+          <button
+            key={f.key}
+            onClick={() => setActiveStyle(f.key)}
+            className="flex items-center gap-1.5 text-xs transition-all duration-200"
+            style={{ color: activeStyle === f.key ? MINT : 'rgba(255,255,255,0.3)' }}
+          >
+            <span
+              className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0"
+              style={{ backgroundColor: activeStyle === f.key ? MINT : 'rgba(255,255,255,0.2)' }}
+            />
+            <span style={{ fontWeight: activeStyle === f.key ? 600 : 400 }}>
+              {FILTER_ABBR[f.key] ?? f.key}
+            </span>
+            <span style={{ color: activeStyle === f.key ? 'rgba(91,188,180,0.8)' : 'rgba(255,255,255,0.2)' }}>
+              {f.desc}
+            </span>
+          </button>
+        ))}
+      </div>
+
       {/* 싱어 그리드 */}
       <AnimatePresence mode="wait">
         <motion.div
