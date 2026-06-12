@@ -1,10 +1,10 @@
 /**
  * 하단 플로팅 버튼
- * 한 줄: [ ▶ 실황영상보기 ] [ SNS 아이콘 pill ] [ 💬 카톡상담하기 ]
+ * 한 줄: [ 🎤 싱어 선택하기 ] [ SNS 아이콘 pill ] [ 💬 카톡상담하기 ]
  * 히어로 섹션(100vh) 지나면 하단에 나타남
  */
 import { useState, useEffect } from "react";
-import { MessageCircle, Play, Globe } from "lucide-react";
+import { MessageCircle, Mic, Globe } from "lucide-react";
 
 const NaverBlogIcon = () => (
   <svg width="13" height="13" viewBox="0 0 24 24">
@@ -98,19 +98,20 @@ export default function FloatingButtons() {
     >
       <div className="flex justify-center items-stretch px-4 pb-6 gap-2">
 
-        {/* 왼쪽: 실황영상보기 */}
-        <a
-          href="https://blog.naver.com/PostThumbnailList.nhn?blogId=inusmusics&from=postList&categoryNo=32"
-          target="_blank"
-          rel="noopener noreferrer"
+        {/* 왼쪽: 싱어 선택하기 */}
+        <button
+          onClick={() => {
+            const el = document.getElementById('singer-profiles');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }}
           className={`${visible ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center gap-2 px-4 py-3 backdrop-blur-sm border transition-all duration-300 shadow-lg group shrink-0`}
           style={{ backgroundColor: 'rgba(26,26,26,0.92)', borderColor: 'rgba(91,188,180,0.35)', color: '#e8f8f7' }}
         >
-          <Play className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} style={{ color: '#5BBCB4' }} />
+          <Mic className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} style={{ color: '#5BBCB4' }} />
           <span className="text-xs tracking-wide" style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-            실황영상보기
+            싱어 선택하기
           </span>
-        </a>
+        </button>
 
         {/* 가운데: SNS 아이콘 */}
         <div

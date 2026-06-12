@@ -14,7 +14,7 @@ import {
   Mic, Music, Star, CheckCircle, Calendar, Users,
   MessageSquare, ChevronDown, ChevronLeft, ChevronRight,
   Play, Award, Shield, Heart, Phone, ExternalLink,
-  Sparkles, FileText, Headphones, Clock, MapPin, User
+  Sparkles, FileText, Headphones, Clock, MapPin, User, X
 } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import InusCardPopup from "@/components/InusCardPopup";
@@ -212,41 +212,58 @@ function ReviewSlider({ images }: { images: string[] }) {
   );
 }
 
-/* ─── Singer Style Filter + Slider ─── */
+/* ─── Singer Grid (그리드 카드 + 상세 프로필 패널) ─── */
 function SingerStyleFilter() {
   const [activeStyle, setActiveStyle] = useState("전체");
+  const [selectedSinger, setSelectedSinger] = useState<typeof SINGER_PROFILES[0] | null>(null);
+
   const filtered = activeStyle === "전체"
     ? SINGER_PROFILES
     : SINGER_PROFILES.filter((s) => s.styles.includes(activeStyle));
-  const activeFilter = SINGER_STYLE_FILTERS.find((f) => f.key === activeStyle);
+
+  // 필터 앞글자 매핑
+  const FILTER_ABBR: Record<string, string> = {
+    "전체": "전체",
+    "감동형": "감동",
+    "감성형": "감성",
+    "가창력형": "가창",
+    "뮤지컬형": "뮤지",
+  };
+
+  // 등급 스타일
+  const gradeStyle = (grade: string) => {
+    if (grade === 'premium') return { bg: 'linear-gradient(135deg, #C9973A 0%, #E8C56A 50%, #C9973A 100%)', color: '#fff', label: 'P' };
+    if (grade === 'best') return { bg: MINT, color: '#fff', label: 'B' };
+    return { bg: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.85)', label: 'S' };
+  };
 
   return (
     <div>
-      {/* Filter Tabs */}
-      <div className="grid mb-6 w-full" style={{ gridTemplateColumns: 'repeat(5, 1fr)', gap: '4px' }}>
+      {/* 필터 배지 — 오른쪽 정렬 */}
+      <div className="flex justify-end items-center gap-1.5 mb-8">
+        <span className="text-white/30 text-xs mr-1 tracking-wider">FILTER</span>
         {SINGER_STYLE_FILTERS.map((f) => (
           <button
             key={f.key}
             onClick={() => setActiveStyle(f.key)}
-            className="py-1.5 rounded-full font-medium transition-all duration-200 w-full text-center"
+            className="transition-all duration-200 font-semibold tracking-wider"
             style={{
-              fontSize: '10.5px',
-              backgroundColor: activeStyle === f.key ? MINT : "rgba(255,255,255,0.08)",
-              color: activeStyle === f.key ? "#fff" : "rgba(255,255,255,0.6)",
-              border: activeStyle === f.key ? `1.5px solid ${MINT}` : "1.5px solid rgba(255,255,255,0.15)",
+              fontSize: '10px',
+              padding: '4px 10px',
+              borderRadius: '20px',
+              backgroundColor: activeStyle === f.key ? MINT : 'rgba(255,255,255,0.07)',
+              color: activeStyle === f.key ? '#fff' : 'rgba(255,255,255,0.45)',
+              border: activeStyle === f.key ? `1.5px solid ${MINT}` : '1.5px solid rgba(255,255,255,0.1)',
+              letterSpacing: '0.08em',
+              boxShadow: activeStyle === f.key ? `0 0 12px ${MINT}55` : 'none',
             }}
           >
-            {f.label}
+            {FILTER_ABBR[f.key] ?? f.key}
           </button>
         ))}
       </div>
-      {/* Style Description */}
-      {activeFilter && activeFilter.desc && (
-        <p className="text-center text-xs mb-8" style={{ color: MINT }}>
-          {activeFilter.desc}
-        </p>
-      )}
-      {/* Slider */}
+
+      {/* 싱어 그리드 */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeStyle}
@@ -254,15 +271,137 @@ function SingerStyleFilter() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4"
         >
-          <SingerSlider singers={filtered} />
+          {filtered.map((singer, i) => {
+            const gs = gradeStyle(singer.grade);
+            return (
+              <motion.button
+                key={singer.name}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: i * 0.05 }}
+                onClick={() => setSelectedSinger(selectedSinger?.name === singer.name ? null : singer)}
+                className="relative group rounded-xl overflow-hidden text-left transition-all duration-300"
+                style={{
+                  backgroundColor: DARK_CARD,
+                  border: selectedSinger?.name === singer.name ? `1.5px solid ${MINT}` : '1.5px solid rgba(255,255,255,0.07)',
+                  boxShadow: selectedSinger?.name === singer.name ? `0 0 20px ${MINT}33` : 'none',
+                }}
+              >
+                {/* 사진 */}
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <img
+                    src={singer.image}
+                    alt={singer.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  {/* 등급 배지 — 오른쪽 상단 */}
+                  <span
+                    className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full text-[10px] font-bold shadow-lg"
+                    style={{
+                      background: gs.bg,
+                      color: gs.color,
+                      boxShadow: singer.grade === 'premium' ? '0 2px 8px rgba(201,151,58,0.5)' : singer.grade === 'best' ? `0 2px 8px ${MINT}66` : 'none',
+                    }}
+                  >
+                    {gs.label}
+                  </span>
+                  {/* 이름 */}
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <p className="text-white font-bold text-sm leading-tight" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                      {singer.name}
+                    </p>
+                    <p className="text-white/50 text-[10px] mt-0.5">{singer.career}</p>
+                  </div>
+                </div>
+                {/* 스타일 태그 */}
+                <div className="px-2.5 py-2 flex flex-wrap gap-1">
+                  {singer.styles.map((st) => (
+                    <span key={st} className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(91,188,180,0.12)', color: MINT }}>
+                      {FILTER_ABBR[st] ?? st}
+                    </span>
+                  ))}
+                </div>
+              </motion.button>
+            );
+          })}
         </motion.div>
+      </AnimatePresence>
+
+      {/* 상세 프로필 패널 (클릭 시 확장) */}
+      <AnimatePresence>
+        {selectedSinger && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.4 }}
+            className="mt-6 relative overflow-hidden rounded-2xl"
+            style={{ backgroundColor: DARK_CARD }}
+          >
+            <div className="flex flex-col md:flex-row">
+              {/* Image */}
+              <div className="relative w-full md:w-1/2 aspect-[4/5] md:aspect-auto md:min-h-[500px] overflow-hidden">
+                <img
+                  src={selectedSinger.image}
+                  alt={selectedSinger.name}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                {selectedSinger.grade && (
+                  <span
+                    className="absolute top-4 left-4 px-3 py-1.5 text-xs font-bold rounded-lg shadow-lg"
+                    style={{
+                      backgroundColor: selectedSinger.grade === 'premium' ? '#D4A853' : selectedSinger.grade === 'best' ? MINT : 'rgba(255,255,255,0.9)',
+                      color: selectedSinger.grade === 'standard' ? '#333' : '#fff',
+                    }}
+                  >
+                    {selectedSinger.grade === 'premium' ? 'PREMIUM' : selectedSinger.grade === 'best' ? 'BEST' : 'STANDARD'}
+                  </span>
+                )}
+              </div>
+              {/* Info */}
+              <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center">
+                <p className="text-xs tracking-[0.2em] uppercase mb-3" style={{ color: MINT }}>
+                  SINGER PROFILE
+                </p>
+                <h3 className="text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                  {selectedSinger.name}
+                </h3>
+                <p className="text-sm md:text-base font-medium mb-4" style={{ color: MINT }}>
+                  {selectedSinger.career}
+                </p>
+                <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6">
+                  {selectedSinger.desc}
+                </p>
+                <a
+                  href={selectedSinger.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 text-sm text-white rounded-lg transition-all hover:opacity-90"
+                  style={{ backgroundColor: MINT }}
+                >
+                  프로필 보기
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+            {/* 닫기 버튼 */}
+            <button
+              onClick={() => setSelectedSinger(null)}
+              className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center bg-black/50 hover:bg-black/70 text-white/70 hover:text-white transition-all"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );
 }
 
-/* ─── Singer Slider (사회자 스타일 슬라이드) ─── */
+/* ─── Singer Slider (사회자 스타일 슬라이드) — 하위 호환용, 미사용 ─── */
 function SingerSlider({ singers }: { singers: typeof SINGER_PROFILES }) {
   const [current, setCurrent] = useState(0);
   const touchStartX = useRef(0);
@@ -273,144 +412,52 @@ function SingerSlider({ singers }: { singers: typeof SINGER_PROFILES }) {
     else setCurrent(idx);
   }, [singers.length]);
 
-  // 수동 전환만 지원 (자동재생 없음)
-
   const singer = singers[current];
 
   return (
     <div className="relative">
-      {/* Main Card */}
       <div className="relative overflow-hidden rounded-2xl" style={{ backgroundColor: DARK_CARD }}>
         <div className="flex flex-col md:flex-row">
-          {/* Image */}
           <div
             className="relative w-full md:w-1/2 aspect-[4/5] md:aspect-auto md:min-h-[500px] overflow-hidden"
             onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
             onTouchEnd={(e) => {
               const diff = touchStartX.current - e.changedTouches[0].clientX;
-              if (Math.abs(diff) > 50) {
-                diff > 0 ? goTo(current + 1) : goTo(current - 1);
-              }
+              if (Math.abs(diff) > 50) { diff > 0 ? goTo(current + 1) : goTo(current - 1); }
             }}
           >
             <AnimatePresence mode="wait">
               {singer.image ? (
-                <motion.img
-                  key={singer.image}
-                  src={singer.image}
-                  alt={singer.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6 }}
-                />
+                <motion.img key={singer.image} src={singer.image} alt={singer.name} className="absolute inset-0 w-full h-full object-cover" initial={{ opacity: 0, scale: 1.05 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} />
               ) : (
-                <motion.div
-                  key="placeholder"
-                  className="absolute inset-0 w-full h-full flex items-center justify-center"
-                  style={{ backgroundColor: DARK_BG }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="text-center">
-                    <Mic className="w-12 h-12 mx-auto mb-3" style={{ color: MINT }} />
-                    <p className="text-white/60 text-sm">{singer.name}</p>
-                  </div>
+                <motion.div key="placeholder" className="absolute inset-0 w-full h-full flex items-center justify-center" style={{ backgroundColor: DARK_BG }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }}>
+                  <div className="text-center"><Mic className="w-12 h-12 mx-auto mb-3" style={{ color: MINT }} /><p className="text-white/60 text-sm">{singer.name}</p></div>
                 </motion.div>
               )}
             </AnimatePresence>
             {singer.grade && (
-              <span
-                className="absolute top-4 left-4 px-3 py-1.5 text-xs font-bold rounded-lg shadow-lg"
-                style={{
-                  backgroundColor: singer.grade === 'premium' ? '#D4A853' : singer.grade === 'best' ? MINT : 'rgba(255,255,255,0.9)',
-                  color: singer.grade === 'standard' ? '#333' : '#fff',
-                }}
-              >
+              <span className="absolute top-4 left-4 px-3 py-1.5 text-xs font-bold rounded-lg shadow-lg" style={{ backgroundColor: singer.grade === 'premium' ? '#D4A853' : singer.grade === 'best' ? MINT : 'rgba(255,255,255,0.9)', color: singer.grade === 'standard' ? '#333' : '#fff' }}>
                 {singer.grade === 'premium' ? 'PREMIUM' : singer.grade === 'best' ? 'BEST' : 'STANDARD'}
               </span>
             )}
           </div>
-          {/* Info */}
           <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center">
             <AnimatePresence mode="wait">
-              <motion.div
-                key={singer.name}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.4 }}
-              >
-                <p className="text-xs tracking-[0.2em] uppercase mb-3" style={{ color: MINT }}>
-                  SINGER PROFILE
-                </p>
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-                  {singer.name}
-                </h3>
-                <p className="text-sm md:text-base font-medium mb-4" style={{ color: MINT }}>
-                  {singer.career}
-                </p>
-                <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6">
-                  {singer.desc}
-                </p>
-                <a
-                  href={singer.profileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 text-sm text-white rounded-lg transition-all hover:opacity-90"
-                  style={{ backgroundColor: MINT }}
-                >
-                  프로필 보기
-                  <ExternalLink className="w-4 h-4" />
-                </a>
+              <motion.div key={singer.name} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.4 }}>
+                <p className="text-xs tracking-[0.2em] uppercase mb-3" style={{ color: MINT }}>SINGER PROFILE</p>
+                <h3 className="text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{singer.name}</h3>
+                <p className="text-sm md:text-base font-medium mb-4" style={{ color: MINT }}>{singer.career}</p>
+                <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6">{singer.desc}</p>
+                <a href={singer.profileUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-2.5 text-sm text-white rounded-lg transition-all hover:opacity-90" style={{ backgroundColor: MINT }}>프로필 보기<ExternalLink className="w-4 h-4" /></a>
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
       </div>
-
-      {/* Navigation Arrows */}
-      <button
-        onClick={() => goTo(current - 1)}
-        className="absolute top-1/2 -translate-y-1/2 left-2 md:-left-5 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-black/50 hover:bg-black/70 text-white transition-all z-10 backdrop-blur-sm"
-      >
-        <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
-      </button>
-      <button
-        onClick={() => goTo(current + 1)}
-        className="absolute top-1/2 -translate-y-1/2 right-2 md:-right-5 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-black/50 hover:bg-black/70 text-white transition-all z-10 backdrop-blur-sm"
-      >
-        <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-      </button>
-
-      {/* Dots */}
-      <div className="flex justify-center gap-2 mt-6">
-        {singers.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrent(i)}
-            className={`h-2 rounded-full transition-all duration-300 ${i === current ? "w-8" : "w-2 bg-white/30"}`}
-            style={i === current ? { backgroundColor: MINT } : {}}
-          />
-        ))}
-      </div>
-
-      {/* Thumbnail strip */}
-      <div className="flex justify-center gap-3 mt-5">
-        {singers.map((s, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrent(i)}
-            className={`w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 transition-all duration-300 ${i === current ? "scale-110 shadow-lg" : "opacity-50 hover:opacity-80"}`}
-            style={{ borderColor: i === current ? MINT : "transparent" }}
-          >
-            <img src={s.image} alt={s.name} className="w-full h-full object-cover" />
-          </button>
-        ))}
-      </div>
+      <button onClick={() => goTo(current - 1)} className="absolute top-1/2 -translate-y-1/2 left-2 md:-left-5 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-black/50 hover:bg-black/70 text-white transition-all z-10 backdrop-blur-sm"><ChevronLeft className="w-5 h-5 md:w-6 md:h-6" /></button>
+      <button onClick={() => goTo(current + 1)} className="absolute top-1/2 -translate-y-1/2 right-2 md:-right-5 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-black/50 hover:bg-black/70 text-white transition-all z-10 backdrop-blur-sm"><ChevronRight className="w-5 h-5 md:w-6 md:h-6" /></button>
+      <div className="flex justify-center gap-2 mt-6">{singers.map((_, i) => (<button key={i} onClick={() => setCurrent(i)} className={`h-2 rounded-full transition-all duration-300 ${i === current ? "w-8" : "w-2 bg-white/30"}`} style={i === current ? { backgroundColor: MINT } : {}} />))}</div>
+      <div className="flex justify-center gap-3 mt-5">{singers.map((s, i) => (<button key={i} onClick={() => setCurrent(i)} className={`w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 transition-all duration-300 ${i === current ? "scale-110 shadow-lg" : "opacity-50 hover:opacity-80"}`} style={{ borderColor: i === current ? MINT : "transparent" }}><img src={s.image} alt={s.name} className="w-full h-full object-cover" /></button>))}</div>
     </div>
   );
 }
