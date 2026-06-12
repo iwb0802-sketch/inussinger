@@ -88,7 +88,7 @@ const SINGER_PROFILES: { name: string; career: string; desc: string; image: stri
   { name: "이윤주", career: "축가 400회 이상", desc: "다채로운 장르를 소화하는 실력파 싱어", image: "/images/singer_leeyunju_af81750f.jpg", profileUrl: "https://blog.naver.com/inusmusics/223660600728", grade: "best", styles: ["감성형", "뮤지컬형"] },
   { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard", styles: ["감동형", "감성형", "가창력형"], videoId: "Oq3INO5PIsU" },
   { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"], videoId: "J_QfTfWz1CI" },
-  { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "standard", styles: ["감성형", "가창력형"] },
+  { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "standard", styles: ["감성형", "가창력형"], videoId: "Ux5ouZOgyj0" },
 ];
 
 const SINGER_STYLE_FILTERS = [
