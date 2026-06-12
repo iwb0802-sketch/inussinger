@@ -370,14 +370,15 @@ function SingerStyleFilter() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-              className="relative w-full max-w-2xl overflow-hidden rounded-2xl"
-              style={{ backgroundColor: DARK_CARD, maxHeight: '90vh' }}
+              className="relative w-full overflow-hidden rounded-2xl"
+              style={{ backgroundColor: DARK_CARD, maxHeight: '90vh', overflowY: 'auto', maxWidth: selectedSinger.videoId ? '560px' : '672px' }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex flex-col md:flex-row">
-                {/* Image or Video */}
-                <div className="relative w-full md:w-5/12 aspect-[3/4] md:aspect-auto md:min-h-[420px] overflow-hidden flex-shrink-0">
-                  {selectedSinger.videoId ? (
+              {selectedSinger.videoId ? (
+                /* 영상 모달: 세로 레이아웃 (영상 상단 + 정보 하단) */
+                <div className="flex flex-col">
+                  {/* 16:9 영상 영역 */}
+                  <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                     <iframe
                       src={`https://www.youtube.com/embed/${selectedSinger.videoId}?autoplay=1&mute=0&rel=0&modestbranding=1`}
                       title={`${selectedSinger.name} 축가 영상`}
@@ -386,61 +387,96 @@ function SingerStyleFilter() {
                       className="absolute inset-0 w-full h-full"
                       style={{ border: 'none' }}
                     />
-                  ) : (
-                    <>
-                      <img
-                        src={selectedSinger.image}
-                        alt={selectedSinger.name}
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                    </>
-                  )}
-                  {!selectedSinger.videoId && selectedSinger.grade && (
-                    <span
-                      className="absolute top-4 left-4 px-3 py-1.5 text-xs font-bold rounded-lg shadow-lg"
-                      style={{
-                        backgroundColor: selectedSinger.grade === 'premium' ? '#D4A853' : selectedSinger.grade === 'best' ? MINT : 'rgba(255,255,255,0.9)',
-                        color: selectedSinger.grade === 'standard' ? '#333' : '#fff',
-                      }}
-                    >
-                      {selectedSinger.grade === 'premium' ? 'PREMIUM' : selectedSinger.grade === 'best' ? 'BEST' : 'STANDARD'}
-                    </span>
-                  )}
-                </div>
-                {/* Info */}
-                <div className="w-full md:w-7/12 p-6 md:p-8 flex flex-col justify-center overflow-y-auto">
-                  <p className="text-xs tracking-[0.2em] uppercase mb-3" style={{ color: MINT }}>
-                    SINGER PROFILE
-                  </p>
-                  <h3 className="text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-                    {selectedSinger.name}
-                  </h3>
-                  <p className="text-sm md:text-base font-medium mb-4" style={{ color: MINT }}>
-                    {selectedSinger.career}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {selectedSinger.styles.map((st) => (
-                      <span key={st} className="text-[10px] px-2 py-1 rounded-full" style={{ backgroundColor: 'rgba(91,188,180,0.15)', color: MINT, border: `1px solid ${MINT}44` }}>
-                        {FILTER_ABBR[st] ?? st}
-                      </span>
-                    ))}
                   </div>
-                  <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6">
-                    {selectedSinger.desc}
-                  </p>
-                  <a
-                    href={selectedSinger.profileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-2.5 text-sm text-white rounded-lg transition-all hover:opacity-90 w-fit"
-                    style={{ backgroundColor: MINT }}
-                  >
-                    프로필 보기
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
+                  {/* 정보 영역 */}
+                  <div className="p-5 flex flex-col gap-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-[10px] tracking-[0.2em] uppercase mb-1" style={{ color: MINT }}>SINGER PROFILE</p>
+                        <h3 className="text-2xl font-bold text-white" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                          {selectedSinger.name}
+                        </h3>
+                        <p className="text-sm font-medium mt-0.5" style={{ color: MINT }}>{selectedSinger.career}</p>
+                      </div>
+                      <span
+                        className="flex-shrink-0 px-2.5 py-1 text-[10px] font-bold rounded-lg mt-1"
+                        style={{
+                          backgroundColor: selectedSinger.grade === 'premium' ? '#D4A853' : selectedSinger.grade === 'best' ? MINT : 'rgba(255,255,255,0.15)',
+                          color: selectedSinger.grade === 'standard' ? 'rgba(255,255,255,0.85)' : '#fff',
+                        }}
+                      >
+                        {selectedSinger.grade === 'premium' ? 'PREMIUM' : selectedSinger.grade === 'best' ? 'BEST' : 'STANDARD'}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedSinger.styles.map((st) => (
+                        <span key={st} className="text-[10px] px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(91,188,180,0.15)', color: MINT, border: `1px solid ${MINT}44` }}>
+                          {FILTER_ABBR[st] ?? st}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-white/60 text-sm leading-relaxed">{selectedSinger.desc}</p>
+                    <a
+                      href={selectedSinger.profileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 text-sm text-white rounded-lg transition-all hover:opacity-90 w-fit"
+                      style={{ backgroundColor: MINT }}
+                    >
+                      프로필 보기
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                /* 사진 모달: 기존 가로 레이아웃 */
+                <div className="flex flex-col md:flex-row">
+                  <div className="relative w-full md:w-5/12 aspect-[3/4] md:aspect-auto md:min-h-[420px] overflow-hidden flex-shrink-0">
+                    <img
+                      src={selectedSinger.image}
+                      alt={selectedSinger.name}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    {selectedSinger.grade && (
+                      <span
+                        className="absolute top-4 left-4 px-3 py-1.5 text-xs font-bold rounded-lg shadow-lg"
+                        style={{
+                          backgroundColor: selectedSinger.grade === 'premium' ? '#D4A853' : selectedSinger.grade === 'best' ? MINT : 'rgba(255,255,255,0.9)',
+                          color: selectedSinger.grade === 'standard' ? '#333' : '#fff',
+                        }}
+                      >
+                        {selectedSinger.grade === 'premium' ? 'PREMIUM' : selectedSinger.grade === 'best' ? 'BEST' : 'STANDARD'}
+                      </span>
+                    )}
+                  </div>
+                  <div className="w-full md:w-7/12 p-6 md:p-8 flex flex-col justify-center overflow-y-auto">
+                    <p className="text-xs tracking-[0.2em] uppercase mb-3" style={{ color: MINT }}>SINGER PROFILE</p>
+                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                      {selectedSinger.name}
+                    </h3>
+                    <p className="text-sm md:text-base font-medium mb-4" style={{ color: MINT }}>{selectedSinger.career}</p>
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {selectedSinger.styles.map((st) => (
+                        <span key={st} className="text-[10px] px-2 py-1 rounded-full" style={{ backgroundColor: 'rgba(91,188,180,0.15)', color: MINT, border: `1px solid ${MINT}44` }}>
+                          {FILTER_ABBR[st] ?? st}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6">{selectedSinger.desc}</p>
+                    <a
+                      href={selectedSinger.profileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 text-sm text-white rounded-lg transition-all hover:opacity-90 w-fit"
+                      style={{ backgroundColor: MINT }}
+                    >
+                      프로필 보기
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              )}
               {/* 닫기 버튼 */}
               <button
                 onClick={() => setSelectedSinger(null)}
