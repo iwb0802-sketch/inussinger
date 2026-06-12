@@ -22,11 +22,11 @@ import FloatingButtonsNew from "@/components/FloatingButtons";
 
 /* ─── Image URLs ─── */
 const IMAGES = {
-  hero: "/manus-storage/hero-banner_b03c8aaf.webp",
-  singer: "/manus-storage/singer-stage_043f34ac.webp",
-  reviewBg: "/manus-storage/hero-banner_b03c8aaf.webp",
-  eventBg: "/manus-storage/hero-banner_b03c8aaf.webp",
-  ctaBg: "/manus-storage/singer-stage_043f34ac.webp",
+  hero: "/images/hero-banner.webp",
+  singer: "/images/singer-stage.webp",
+  reviewBg: "/images/hero-banner.webp",
+  eventBg: "/images/hero-banner.webp",
+  ctaBg: "/images/singer-stage.webp",
 };
 
 const MINT = "#5BBCB4";
@@ -71,24 +71,24 @@ const VIDEOS = [
 
 /* ─── Review Images ─── */
 const REVIEW_IMAGES: string[] = [
-  "/manus-storage/review1_aeb003e0_9b445200.jpg",
-  "/manus-storage/review2_6784a278_36b1448b.jpg",
-  "/manus-storage/review3_9b079cec_34c0a85b.jpg",
-  "/manus-storage/review4_247501cc_03e716f4.jpg",
-  "/manus-storage/review5_fff60f93_88b0d731.jpg",
-  "/manus-storage/review6_1c1707e6_9132d2d5.jpg",
-  "/manus-storage/review7_8d1ec07b_933b046c.jpg",
+  "/images/review1_aeb003e0.jpg",
+  "/images/review2_6784a278.jpg",
+  "/images/review3_9b079cec.jpg",
+  "/images/review4_247501cc.jpg",
+  "/images/review5_fff60f93.jpg",
+  "/images/review6_1c1707e6.jpg",
+  "/images/review7_8d1ec07b.jpg",
 ];
 
 /* ─── Singer Profiles ─── */
 const SINGER_PROFILES: { name: string; career: string; desc: string; image: string; profileUrl: string; grade: "premium" | "best" | "standard"; styles: string[] }[] = [
-  { name: "김영일", career: "축가 400회 이상", desc: "부드럽고 섬세한 음색의 감성 보컬", image: "/manus-storage/singer_kimyoungil_787db8ce_bc8d74e4.jpg", profileUrl: "https://blog.naver.com/inusmusics/220681337963", grade: "best", styles: ["감성형", "가창력형"] },
-  { name: "제은빈", career: "축가 500회 이상", desc: "풍부한 경험과 안정적인 라이브로 사랑받는 싱어", image: "/manus-storage/singer_jeeunbin_9523ebe9_18ed2a6c.jpg", profileUrl: "https://blog.naver.com/inusmusics/223539681185", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
-  { name: "박달해", career: "축가 400회 이상", desc: "따뜻한 음색으로 하객의 마음을 사로잡는 싱어", image: "/manus-storage/singer_parkdalhae_2db130ed_7127a540.jpg", profileUrl: "https://blog.naver.com/inusmusics/220678041150", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
-  { name: "이윤주", career: "축가 400회 이상", desc: "다채로운 장르를 소화하는 실력파 싱어", image: "/manus-storage/singer_leeyunju_af81750f_13645432.jpg", profileUrl: "https://blog.naver.com/inusmusics/223660600728", grade: "best", styles: ["감성형", "뮤지컬형"] },
-  { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/manus-storage/singer_seodongjun_059211c6_e598923f.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard", styles: ["감동형", "감성형", "가창력형"] },
-  { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/manus-storage/singer_kwonsoi_4c7fd51b.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
-  { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/manus-storage/singer_choibyungjun_bb61e940.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "standard", styles: ["감성형", "가창력형"] },
+  { name: "김영일", career: "축가 400회 이상", desc: "부드럽고 섬세한 음색의 감성 보컬", image: "/images/singer_kimyoungil_787db8ce.jpg", profileUrl: "https://blog.naver.com/inusmusics/220681337963", grade: "best", styles: ["감성형", "가창력형"] },
+  { name: "제은빈", career: "축가 500회 이상", desc: "풍부한 경험과 안정적인 라이브로 사랑받는 싱어", image: "/images/singer_jeeunbin_9523ebe9.jpg", profileUrl: "https://blog.naver.com/inusmusics/223539681185", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
+  { name: "박달해", career: "축가 400회 이상", desc: "따뜻한 음색으로 하객의 마음을 사로잡는 싱어", image: "/images/singer_parkdalhae_2db130ed.jpg", profileUrl: "https://blog.naver.com/inusmusics/220678041150", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
+  { name: "이윤주", career: "축가 400회 이상", desc: "다채로운 장르를 소화하는 실력파 싱어", image: "/images/singer_leeyunju_af81750f.jpg", profileUrl: "https://blog.naver.com/inusmusics/223660600728", grade: "best", styles: ["감성형", "뮤지컬형"] },
+  { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard", styles: ["감동형", "감성형", "가창력형"] },
+  { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium", styles: ["감동형", "가창력형", "뮤지컬형"] },
+  { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "standard", styles: ["감성형", "가창력형"] },
 ];
 
 const SINGER_STYLE_FILTERS = [
