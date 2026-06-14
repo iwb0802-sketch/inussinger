@@ -212,6 +212,350 @@ function ReviewSlider({ images }: { images: string[] }) {
   );
 }
 
+/* ─── Singer Finder Button + Modal ─── */
+const FINDER_QUESTIONS = [
+  {
+    id: "song_style",
+    question: "축가로 어떤 느낌의 곡을 원하세요?",
+    options: [
+      { label: "하객 모두가 눈물 흘리는 감동적인 곡", value: "감동형" },
+      { label: "잔잔하고 따뜻한 서정적인 발라드", value: "감성형" },
+      { label: "성량이 돋보이는 파워풀한 라이브", value: "가창력형" },
+      { label: "드라마틱하고 기억에 남는 퍼포먼스", value: "뮤지컬형" },
+    ],
+  },
+  {
+    id: "singer_voice",
+    question: "어떤 목소리 타입을 선호하세요?",
+    options: [
+      { label: "진심이 느껴지는 깊고 울림 있는 목소리", value: "감동형" },
+      { label: "부드럽고 편안하게 귀에 감기는 목소리", value: "감성형" },
+      { label: "넓은 음역과 폭발적인 성량의 목소리", value: "가창력형" },
+      { label: "표현력이 풍부한 뮤지컬 스타일 목소리", value: "뮤지컬형" },
+    ],
+  },
+  {
+    id: "moment",
+    question: "축가 순간에 어떤 장면을 상상하세요?",
+    options: [
+      { label: "부모님과 하객들이 눈물을 훔치는 장면", value: "감동형" },
+      { label: "신랑신부가 서로 바라보며 미소 짓는 장면", value: "감성형" },
+      { label: "하객들이 무대에 압도되는 장면", value: "가창력형" },
+      { label: "예식장이 뮤지컬 공연장처럼 느껴지는 장면", value: "뮤지컬형" },
+    ],
+  },
+  {
+    id: "priority",
+    question: "축가 싱어를 고를 때 가장 중요한 건?",
+    options: [
+      { label: "감정 전달력 — 진심이 느껴지는 무대", value: "감동형" },
+      { label: "자연스러움 — 편안하고 따뜻한 분위기", value: "감성형" },
+      { label: "실력 — 흔들림 없는 안정적인 라이브", value: "가창력형" },
+      { label: "특별함 — 다른 예식과 차별화되는 무대", value: "뮤지컬형" },
+    ],
+  },
+];
+
+function SingerFinderButton() {
+  const [open, setOpen] = useState(false);
+  const [step, setStep] = useState<"quiz" | "result">("quiz");
+  const [currentQ, setCurrentQ] = useState(0);
+  const [answers, setAnswers] = useState<string[]>([]);
+  const [result, setResult] = useState<typeof SINGER_PROFILES[0][] | null>(null);
+
+  const FILTER_ABBR: Record<string, string> = {
+    "감동형": "감동형", "감성형": "감성형", "가창력형": "가창력형", "뮤지컬형": "뮤지컬형",
+  };
+
+  const calcResult = (ans: string[]) => {
+    // 스타일별 점수 집계
+    const score: Record<string, number> = { "감동형": 0, "감성형": 0, "가창력형": 0, "뮤지컬형": 0 };
+    ans.forEach((a) => { if (score[a] !== undefined) score[a]++; });
+
+    // 각 싱어별 매칭 점수 계산 (스타일 점수 합산 + 등급 가중치)
+    const gradeWeight: Record<string, number> = { premium: 0.3, best: 0.2, standard: 0.1 };
+    const singerScores = SINGER_PROFILES.map((s) => {
+      const styleScore = s.styles.reduce((sum, st) => sum + (score[st] ?? 0), 0);
+      const normalized = styleScore / s.styles.length; // 스타일 수로 나눠서 공평하게
+      return { singer: s, score: normalized + gradeWeight[s.grade] };
+    });
+
+    // 점수 내림차순 정렬 후 상위 3명 (동점 시 셔플로 다양성 확보)
+    singerScores.sort((a, b) => {
+      if (Math.abs(a.score - b.score) < 0.01) return Math.random() - 0.5;
+      return b.score - a.score;
+    });
+
+    return singerScores.slice(0, 3).map((s) => s.singer);
+  };
+
+  const handleAnswer = (value: string) => {
+    const newAnswers = [...answers, value];
+    if (currentQ < FINDER_QUESTIONS.length - 1) {
+      setAnswers(newAnswers);
+      setCurrentQ(currentQ + 1);
+    } else {
+      setResult(calcResult(newAnswers));
+      setStep("result");
+    }
+  };
+
+  const reset = () => {
+    setStep("quiz");
+    setCurrentQ(0);
+    setAnswers([]);
+    setResult(null);
+  };
+
+  const handleOpen = () => {
+    reset();
+    setOpen(true);
+  };
+
+  const gradeStyle = (grade: string) => {
+    if (grade === "premium") return { bg: "linear-gradient(135deg, #C9973A 0%, #E8C56A 50%, #C9973A 100%)", color: "#fff", label: "PREMIUM" };
+    if (grade === "best") return { bg: MINT, color: "#fff", label: "BEST" };
+    return { bg: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.85)", label: "STANDARD" };
+  };
+
+  return (
+    <>
+      {/* 검색창 스타일 버튼 */}
+      <div className="flex justify-center mb-10 md:mb-14">
+        <button
+          onClick={handleOpen}
+          className="flex items-center gap-3 px-7 py-4 rounded-2xl border-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl group"
+          style={{
+            backgroundColor: "rgba(91,188,180,0.07)",
+            borderColor: MINT,
+            boxShadow: `0 0 24px ${MINT}33`,
+            minWidth: "300px",
+            maxWidth: "480px",
+            width: "100%",
+          }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={MINT} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <span
+            className="text-base font-medium tracking-wide group-hover:opacity-100 transition-opacity"
+            style={{ color: MINT, fontFamily: "'Noto Sans KR', sans-serif" }}
+          >
+            내 결혼식에 어울리는 축가 싱어 찾기
+          </span>
+        </button>
+      </div>
+
+      {/* 모달 */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ backgroundColor: "rgba(0,0,0,0.80)", backdropFilter: "blur(8px)" }}
+            onClick={() => setOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 24 }}
+              transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+              className="relative w-full rounded-2xl overflow-hidden"
+              style={{ backgroundColor: DARK_CARD, maxWidth: "560px", maxHeight: "90vh", overflowY: "auto" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* 헤더 */}
+              <div className="px-6 pt-6 pb-4 border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={MINT} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <span className="text-sm font-semibold" style={{ color: MINT }}>축가 싱어 찾기</span>
+                  </div>
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="w-7 h-7 rounded-full flex items-center justify-center transition-all"
+                    style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.5)" }}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-6">
+                <AnimatePresence mode="wait">
+                  {/* ── QUIZ ── */}
+                  {step === "quiz" && (
+                    <motion.div
+                      key={`q-${currentQ}`}
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -30 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {/* 진행 바 */}
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.08)" }}>
+                          <div
+                            className="h-full rounded-full transition-all duration-500"
+                            style={{ width: `${((currentQ + 1) / FINDER_QUESTIONS.length) * 100}%`, backgroundColor: MINT }}
+                          />
+                        </div>
+                        <span className="text-[11px] whitespace-nowrap" style={{ color: "rgba(255,255,255,0.35)" }}>
+                          {currentQ + 1} / {FINDER_QUESTIONS.length}
+                        </span>
+                      </div>
+
+                      <p className="text-[10px] tracking-[0.2em] uppercase mb-3" style={{ color: MINT }}>Q{currentQ + 1}</p>
+                      <h3 className="text-lg md:text-xl font-bold text-white mb-6" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                        {FINDER_QUESTIONS[currentQ].question}
+                      </h3>
+
+                      <div className="grid grid-cols-1 gap-2.5">
+                        {FINDER_QUESTIONS[currentQ].options.map((opt, i) => (
+                          <motion.button
+                            key={opt.value + i}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.06 }}
+                            onClick={() => handleAnswer(opt.value)}
+                            className="text-left px-4 py-3.5 rounded-xl border text-sm transition-all duration-200"
+                            style={{ backgroundColor: "rgba(255,255,255,0.04)", borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.75)" }}
+                            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = `${MINT}18`; e.currentTarget.style.borderColor = MINT; e.currentTarget.style.color = "#fff"; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
+                          >
+                            <span className="text-xs mr-2 font-semibold" style={{ color: MINT }}>{String.fromCharCode(65 + i)}.</span>
+                            {opt.label}
+                          </motion.button>
+                        ))}
+                      </div>
+
+                      {currentQ > 0 && (
+                        <button
+                          onClick={() => { setCurrentQ(currentQ - 1); setAnswers(answers.slice(0, -1)); }}
+                          className="mt-4 text-xs transition-colors"
+                          style={{ color: "rgba(255,255,255,0.25)" }}
+                          onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "rgba(255,255,255,0.6)"; }}
+                          onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "rgba(255,255,255,0.25)"; }}
+                        >
+                          ← 이전으로
+                        </button>
+                      )}
+                    </motion.div>
+                  )}
+
+                  {/* ── RESULT ── */}
+                  {step === "result" && result && (
+                    <motion.div
+                      key="result"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.4 }}
+                    >
+                      <div className="text-center mb-6">
+                        <div
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs mb-3"
+                          style={{ backgroundColor: `${MINT}22`, color: MINT }}
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          추천 결과
+                        </div>
+                        <h3 className="text-lg font-bold text-white" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                          고객님 예식에 어울리는 싱어입니다
+                        </h3>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-3 mb-6">
+                        {result.map((singer, i) => {
+                          const gs = gradeStyle(singer.grade);
+                          const rankLabels = ["1순위", "2순위", "3순위"];
+                          const rankColors = [MINT, "#A8D8D4", "rgba(255,255,255,0.35)"];
+                          const rankBorders = [`1.5px solid ${MINT}`, `1.5px solid rgba(91,188,180,0.4)`, "1.5px solid rgba(255,255,255,0.08)"];
+                          return (
+                            <motion.div
+                              key={singer.name}
+                              initial={{ opacity: 0, y: 16 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: i * 0.1 }}
+                              className="rounded-xl overflow-hidden flex flex-col"
+                              style={{ backgroundColor: "rgba(255,255,255,0.04)", border: rankBorders[i] }}
+                            >
+                              {/* 순위 배지 */}
+                              <div
+                                className="flex items-center justify-center gap-1 py-1.5 text-[10px] font-bold tracking-wider"
+                                style={{ backgroundColor: i === 0 ? `${MINT}22` : "rgba(255,255,255,0.03)", color: rankColors[i] }}
+                              >
+                                {i === 0 && <Star className="w-2.5 h-2.5" fill={MINT} />}
+                                {rankLabels[i]}
+                              </div>
+                              <div className="relative aspect-[3/4] overflow-hidden">
+                                <img src={singer.image} alt={singer.name} className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                                <span className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-[8px] font-bold" style={{ background: gs.bg, color: gs.color }}>
+                                  {gs.label}
+                                </span>
+                                <div className="absolute bottom-0 left-0 right-0 p-2">
+                                  <p className="text-white font-bold text-sm" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{singer.name}</p>
+                                  <p className="text-white/50 text-[10px]">{singer.career}</p>
+                                </div>
+                              </div>
+                              <div className="p-2 flex flex-col flex-1">
+                                <div className="flex flex-wrap gap-1 mb-2">
+                                  {singer.styles.map((st) => (
+                                    <span key={st} className="text-[8px] px-1.5 py-0.5 rounded-full" style={{ backgroundColor: `${MINT}18`, color: MINT }}>{FILTER_ABBR[st] ?? st}</span>
+                                  ))}
+                                </div>
+                                <a
+                                  href={singer.profileUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center justify-center gap-1 w-full py-1.5 rounded-lg text-[11px] text-white font-medium transition-all hover:opacity-90 mt-auto"
+                                  style={{ backgroundColor: i === 0 ? MINT : "rgba(91,188,180,0.5)" }}
+                                >
+                                  프로필 보기 <ExternalLink className="w-2.5 h-2.5" />
+                                </a>
+                              </div>
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row gap-2.5 justify-center">
+                        <button
+                          onClick={reset}
+                          className="px-5 py-2.5 rounded-xl text-sm border transition-all"
+                          style={{ borderColor: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.5)" }}
+                        >
+                          다시 테스트하기
+                        </button>
+                        <a
+                          href={LINKS.kakao}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-white text-sm rounded-xl transition-all hover:opacity-90"
+                          style={{ backgroundColor: MINT }}
+                        >
+                          <MessageSquare className="w-4 h-4" />
+                          카카오로 상담하기
+                        </a>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
 /* ─── Singer Grid (그리드 카드 + 상세 프로필 패널) ─── */
 function SingerStyleFilter() {
   const [activeStyle, setActiveStyle] = useState("전체");
@@ -1073,6 +1417,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ═══ SINGER FINDER (내 결혼식에 어울리는 축가 싱어 찾기) ═══ */}
       {/* ═══ SINGER PROFILES (Dark Section - 슬라이드 형식) ═══ */}
       <section id="singer-profiles" className="py-16 md:py-28" style={{ backgroundColor: DARK_BG }}>
         <div className="container max-w-5xl mx-auto">
@@ -1081,9 +1426,11 @@ export default function Home() {
             <h2 className="text-2xl md:text-4xl font-bold text-white text-center mb-3" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
               전문 축가자를 직접 선택하세요
             </h2>
-            <p className="text-white/50 text-center text-xs md:text-sm mb-10 md:mb-14">
+            <p className="text-white/50 text-center text-xs md:text-sm mb-8 md:mb-10">
               고객님들이 가장 많이 선택한 TOP 축가자들입니다
             </p>
+            {/* 싱어 찾기 버튼 */}
+            <SingerFinderButton />
           </AnimatedSection>
 
           {/* Style Filter Tabs */}
