@@ -257,11 +257,23 @@ const FINDER_QUESTIONS = [
 ];
 
 function SingerFinderButton() {
-  const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<"quiz" | "result">("quiz");
+  // sessionStorage로 결과 복원 (프로필 새탭 후 뒤로가기 대응)
+  const [open, setOpen] = useState(() => {
+    try { return sessionStorage.getItem("singerFinder_open") === "1"; } catch { return false; }
+  });
+  const [step, setStep] = useState<"quiz" | "result">(() => {
+    try { return (sessionStorage.getItem("singerFinder_step") as "quiz" | "result") || "quiz"; } catch { return "quiz"; }
+  });
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
-  const [result, setResult] = useState<typeof SINGER_PROFILES[0][] | null>(null);
+  const [result, setResult] = useState<typeof SINGER_PROFILES[0][] | null>(() => {
+    try {
+      const saved = sessionStorage.getItem("singerFinder_result");
+      if (!saved) return null;
+      const names: string[] = JSON.parse(saved);
+      return names.map(n => SINGER_PROFILES.find(s => s.name === n)!).filter(Boolean);
+    } catch { return null; }
+  });
 
   const FILTER_ABBR: Record<string, string> = {
     "감동형": "감동형", "감성형": "감성형", "가창력형": "가창력형", "뮤지컬형": "뮤지컬형",
@@ -295,8 +307,14 @@ function SingerFinderButton() {
       setAnswers(newAnswers);
       setCurrentQ(currentQ + 1);
     } else {
-      setResult(calcResult(newAnswers));
+      const res = calcResult(newAnswers);
+      setResult(res);
       setStep("result");
+      try {
+        sessionStorage.setItem("singerFinder_result", JSON.stringify(res.map(s => s.name)));
+        sessionStorage.setItem("singerFinder_step", "result");
+        sessionStorage.setItem("singerFinder_open", "1");
+      } catch {}
     }
   };
 
@@ -305,11 +323,17 @@ function SingerFinderButton() {
     setCurrentQ(0);
     setAnswers([]);
     setResult(null);
+    try { sessionStorage.removeItem("singerFinder_result"); sessionStorage.removeItem("singerFinder_step"); sessionStorage.removeItem("singerFinder_open"); } catch {}
   };
 
   const handleOpen = () => {
     reset();
     setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    try { sessionStorage.removeItem("singerFinder_open"); } catch {}
   };
 
   const gradeStyle = (grade: string) => {
@@ -356,7 +380,7 @@ function SingerFinderButton() {
             transition={{ duration: 0.25 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             style={{ backgroundColor: "rgba(0,0,0,0.80)", backdropFilter: "blur(8px)" }}
-            onClick={() => setOpen(false)}
+            onClick={handleClose}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 24 }}
@@ -377,7 +401,7 @@ function SingerFinderButton() {
                     <span className="text-sm font-semibold" style={{ color: MINT }}>축가 싱어 찾기</span>
                   </div>
                   <button
-                    onClick={() => setOpen(false)}
+                    onClick={handleClose}
                     className="w-7 h-7 rounded-full flex items-center justify-center transition-all"
                     style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.5)" }}
                   >
