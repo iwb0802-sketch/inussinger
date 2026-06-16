@@ -662,7 +662,8 @@ function SingerFinderButton() {
                 <div className="flex flex-col">
                   <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                     <iframe
-                      src={`https://www.youtube.com/embed/${profileModal.videoId}?autoplay=1&mute=0&rel=0&modestbranding=1`}
+                      key={profileModal.videoId}
+                      src={`https://www.youtube.com/embed/${profileModal.videoId}?autoplay=1&mute=0&rel=0&modestbranding=1&enablejsapi=1`}
                       title={`${profileModal.name} 축가 영상`}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
