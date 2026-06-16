@@ -1350,14 +1350,16 @@ export default function Home() {
             className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-xs sm:max-w-none sm:w-auto mx-auto sm:mx-0"
           >
             <a
-              href={LINKS.kakao}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#singer-profiles"
               className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 text-white rounded-lg text-base font-medium transition-all duration-300 hover:opacity-90"
               style={{ backgroundColor: MINT }}
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('singer-profiles')?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               <MessageSquare className="w-5 h-5" />
-              무료 상담 시작하기
+              싱어 선택하기
             </a>
             <a
               href="#trust"
