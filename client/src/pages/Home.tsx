@@ -19,6 +19,7 @@ import {
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import InusCardPopup from "@/components/InusCardPopup";
 import FloatingButtonsNew from "@/components/FloatingButtons";
+import QuickNav from "@/components/QuickNav";
 
 /* ─── Image URLs ─── */
 const IMAGES = {
@@ -1107,6 +1108,7 @@ export default function Home() {
     <div className="min-h-screen">
       <Navbar />
       <FloatingButtonsNew />
+      <QuickNav />
       <InusCardPopup />
 
       {/* ═══ HERO SECTION ═══ */}
