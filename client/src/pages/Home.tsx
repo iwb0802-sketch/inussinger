@@ -280,26 +280,55 @@ function SingerFinderButton() {
     "감동형": "감동형", "감성형": "감성형", "가창력형": "가창력형", "뮤지컬형": "뮤지컬형",
   };
 
+  // 답변 조합 → 추천 이유 문구
+  const [resultReason, setResultReason] = useState<string>(() => {
+    try { return sessionStorage.getItem("singerFinder_reason") || ""; } catch { return ""; }
+  });
+  // 프로필 모달
+  const [profileModal, setProfileModal] = useState<typeof SINGER_PROFILES[0] | null>(null);
+
+  const buildReason = (ans: string[]) => {
+    const counts: Record<string, number> = { "감동형": 0, "감성형": 0, "가창력형": 0, "뮤지컬형": 0 };
+    ans.forEach((a) => { if (counts[a] !== undefined) counts[a]++; });
+    const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+    const reasonMap: Record<string, string> = {
+      "감동형": "감동적인 무대로 하객 모두의 마음을 울리는 싱어를 추천했습니다. 진심 어린 표현과 깊은 울림으로 예식의 감동을 더해드립니다.",
+      "감성형": "잔잔하고 서정적인 분위기를 원하시는 분께 최적화된 싱어를 추천했습니다. 따뜻한 음색으로 신랑신부의 아름다운 순간을 완성합니다.",
+      "가창력형": "압도적인 라이브 실력을 갖춘 싱어를 추천했습니다. 흔들림 없는 안정적인 가창력으로 잊지 못할 무대를 선사합니다.",
+      "뮤지컬형": "드라마틱하고 특별한 퍼포먼스를 원하시는 분께 최적화된 싱어를 추천했습니다. 뮤지컬처럼 기억에 남는 축가 무대를 만들어드립니다.",
+    };
+    return reasonMap[top] ?? "고객님의 예식 스타일에 가장 잘 맞는 싱어를 추천했습니다.";
+  };
+
   const calcResult = (ans: string[]) => {
-    // 스타일별 점수 집계
     const score: Record<string, number> = { "감동형": 0, "감성형": 0, "가창력형": 0, "뮤지컬형": 0 };
     ans.forEach((a) => { if (score[a] !== undefined) score[a]++; });
-
-    // 각 싱어별 매칭 점수 계산 (스타일 점수 합산 + 등급 가중치)
     const gradeWeight: Record<string, number> = { premium: 0.3, best: 0.2, standard: 0.1 };
     const singerScores = SINGER_PROFILES.map((s) => {
       const styleScore = s.styles.reduce((sum, st) => sum + (score[st] ?? 0), 0);
-      const normalized = styleScore / s.styles.length; // 스타일 수로 나눠서 공평하게
+      const normalized = styleScore / s.styles.length;
       return { singer: s, score: normalized + gradeWeight[s.grade] };
     });
-
-    // 점수 내림차순 정렬 후 상위 3명 (동점 시 셔플로 다양성 확보)
     singerScores.sort((a, b) => {
       if (Math.abs(a.score - b.score) < 0.01) return Math.random() - 0.5;
       return b.score - a.score;
     });
-
     return singerScores.slice(0, 3).map((s) => s.singer);
+  };
+
+  const handleKakaoShare = () => {
+    if (!result) return;
+    const text = `🎤 내 결혼식에 어울리는 축가 싱어 추천 결과\n1순위: ${result[0].name} 싱어\n2순위: ${result[1].name} 싱어\n3순위: ${result[2].name} 싱어\n\n${resultReason}\n\n▶ 이너스뮤직 축가 싱어 보러가기\nhttps://www.inusmusic.kr`;
+    // 카카오 앱스킴 또는 클립보드 복사 후 안내
+    if (navigator.share) {
+      navigator.share({ text });
+    } else {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("결과가 클립보드에 복사됐어요!\n카카오톡을 열어 붙여넣기 해주세요 😊");
+      }).catch(() => {
+        alert(text);
+      });
+    }
   };
 
   const handleAnswer = (value: string) => {
@@ -309,12 +338,15 @@ function SingerFinderButton() {
       setCurrentQ(currentQ + 1);
     } else {
       const res = calcResult(newAnswers);
+      const reason = buildReason(newAnswers);
       setResult(res);
+      setResultReason(reason);
       setStep("result");
       try {
         sessionStorage.setItem("singerFinder_result", JSON.stringify(res.map(s => s.name)));
         sessionStorage.setItem("singerFinder_step", "result");
         sessionStorage.setItem("singerFinder_open", "1");
+        sessionStorage.setItem("singerFinder_reason", reason);
       } catch {}
     }
   };
@@ -324,7 +356,13 @@ function SingerFinderButton() {
     setCurrentQ(0);
     setAnswers([]);
     setResult(null);
-    try { sessionStorage.removeItem("singerFinder_result"); sessionStorage.removeItem("singerFinder_step"); sessionStorage.removeItem("singerFinder_open"); } catch {}
+    setResultReason("");
+    try {
+      sessionStorage.removeItem("singerFinder_result");
+      sessionStorage.removeItem("singerFinder_step");
+      sessionStorage.removeItem("singerFinder_open");
+      sessionStorage.removeItem("singerFinder_reason");
+    } catch {}
   };
 
   const handleOpen = () => {
@@ -482,7 +520,7 @@ function SingerFinderButton() {
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.4 }}
                     >
-                      <div className="text-center mb-6">
+                      <div className="text-center mb-5">
                         <div
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs mb-3"
                           style={{ backgroundColor: `${MINT}22`, color: MINT }}
@@ -494,6 +532,17 @@ function SingerFinderButton() {
                           고객님 예식에 어울리는 싱어입니다
                         </h3>
                       </div>
+
+                      {/* 추천 이유 박스 */}
+                      {resultReason && (
+                        <div
+                          className="rounded-xl px-4 py-3 mb-5 text-xs leading-relaxed text-center"
+                          style={{ backgroundColor: `${MINT}12`, border: `1px solid ${MINT}33`, color: "rgba(255,255,255,0.7)" }}
+                        >
+                          <span style={{ color: MINT, fontWeight: 600 }}>✦ 추천 이유  </span>
+                          {resultReason}
+                        </div>
+                      )}
 
                       <div className="grid grid-cols-3 gap-3 mb-6">
                         {result.map((singer, i) => {
@@ -535,15 +584,13 @@ function SingerFinderButton() {
                                     <span key={st} className="text-[8px] px-1.5 py-0.5 rounded-full" style={{ backgroundColor: `${MINT}18`, color: MINT }}>{FILTER_ABBR[st] ?? st}</span>
                                   ))}
                                 </div>
-                                <a
-                                  href={singer.profileUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
+                                <button
+                                  onClick={() => setProfileModal(singer)}
                                   className="flex items-center justify-center gap-1 w-full py-1.5 rounded-lg text-[11px] text-white font-medium transition-all hover:opacity-90 mt-auto"
                                   style={{ backgroundColor: i === 0 ? MINT : "rgba(91,188,180,0.5)" }}
                                 >
-                                  프로필 보기 <ExternalLink className="w-2.5 h-2.5" />
-                                </a>
+                                  프로필 보기
+                                </button>
                               </div>
                             </motion.div>
                           );
@@ -557,6 +604,16 @@ function SingerFinderButton() {
                           style={{ borderColor: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.5)" }}
                         >
                           다시 테스트하기
+                        </button>
+                        <button
+                          onClick={handleKakaoShare}
+                          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-[#3A1D1D] text-sm rounded-xl font-semibold transition-all hover:opacity-90"
+                          style={{ backgroundColor: "#FEE500" }}
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="#3A1D1D">
+                            <path d="M12 3C6.477 3 2 6.477 2 10.909c0 2.91 1.696 5.467 4.273 6.988L5.09 21l4.393-2.618C10.266 18.572 11.126 18.727 12 18.727c5.523 0 10-3.477 10-7.818C22 6.477 17.523 3 12 3z"/>
+                          </svg>
+                          카카오톡 공유
                         </button>
                         <a
                           href={LINKS.kakao}
@@ -572,6 +629,101 @@ function SingerFinderButton() {
                     </motion.div>
                   )}
                 </AnimatePresence>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── 프로필 모달 ── */}
+      <AnimatePresence>
+        {profileModal && (
+          <motion.div
+            key="profile-modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+            style={{ backgroundColor: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)" }}
+            onClick={() => setProfileModal(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.93, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.93 }}
+              transition={{ duration: 0.25 }}
+              className="relative rounded-2xl overflow-hidden w-full max-w-sm"
+              style={{ backgroundColor: "#1A1A2E", border: `1px solid ${MINT}44`, maxHeight: "90vh" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* 닫기 버튼 */}
+              <button
+                onClick={() => setProfileModal(null)}
+                className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all"
+                style={{ backgroundColor: "rgba(0,0,0,0.5)", color: "rgba(255,255,255,0.7)" }}
+              >
+                ✕
+              </button>
+
+              {/* 이미지 */}
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <img src={profileModal.image} alt={profileModal.name} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                {/* 등급 배지 */}
+                {(() => {
+                  const gs = gradeStyle(profileModal.grade);
+                  return (
+                    <span className="absolute top-3 left-3 px-2 py-1 rounded text-[10px] font-bold" style={{ background: gs.bg, color: gs.color }}>
+                      {gs.label}
+                    </span>
+                  );
+                })()}
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <h3 className="text-white text-xl font-bold" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{profileModal.name}</h3>
+                  <p className="text-white/60 text-sm mt-0.5">{profileModal.career}</p>
+                </div>
+              </div>
+
+              {/* 정보 */}
+              <div className="p-4 overflow-y-auto" style={{ maxHeight: "45vh" }}>
+                {/* 스타일 태그 */}
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {profileModal.styles.map((st) => (
+                    <span key={st} className="text-xs px-2.5 py-1 rounded-full" style={{ backgroundColor: `${MINT}20`, color: MINT, border: `1px solid ${MINT}44` }}>
+                      {st}
+                    </span>
+                  ))}
+                </div>
+
+                {/* 소개 */}
+                {profileModal.intro && (
+                  <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)" }}>
+                    {profileModal.intro}
+                  </p>
+                )}
+
+                {/* 장르 */}
+                {profileModal.genres && profileModal.genres.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-xs font-semibold mb-2" style={{ color: MINT }}>장르</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {profileModal.genres.map((g) => (
+                        <span key={g} className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.55)" }}>{g}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 상세 페이지 바로가기 */}
+                <a
+                  href={profileModal.profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
+                  style={{ backgroundColor: MINT }}
+                >
+                  상세 프로필 보기 <ExternalLink className="w-3.5 h-3.5" />
+                </a>
               </div>
             </motion.div>
           </motion.div>
