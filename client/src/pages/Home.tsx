@@ -635,7 +635,7 @@ function SingerFinderButton() {
         )}
       </AnimatePresence>
 
-      {/* ── 프로필 모달 ── */}
+      {/* ── 프로필 모달 (싱어 선택 섹션과 동일한 패턴) ── */}
       <AnimatePresence>
         {profileModal && (
           <motion.div
@@ -643,88 +643,131 @@ function SingerFinderButton() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
             className="fixed inset-0 z-[200] flex items-center justify-center p-4"
-            style={{ backgroundColor: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)" }}
+            style={{ backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
             onClick={() => setProfileModal(null)}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.93, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.93 }}
-              transition={{ duration: 0.25 }}
-              className="relative rounded-2xl overflow-hidden w-full max-w-sm"
-              style={{ backgroundColor: "#1A1A2E", border: `1px solid ${MINT}44`, maxHeight: "90vh" }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+              className="relative w-full overflow-hidden rounded-2xl"
+              style={{ backgroundColor: DARK_CARD, maxHeight: '90vh', overflowY: 'auto', maxWidth: profileModal.videoId ? '560px' : '672px' }}
               onClick={(e) => e.stopPropagation()}
             >
+              {profileModal.videoId ? (
+                /* 영상 모달: 영상 상단 + 정보 하단 */
+                <div className="flex flex-col">
+                  <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                    <iframe
+                      src={`https://www.youtube.com/embed/${profileModal.videoId}?autoplay=1&mute=0&rel=0&modestbranding=1`}
+                      title={`${profileModal.name} 축가 영상`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 w-full h-full"
+                      style={{ border: 'none' }}
+                    />
+                  </div>
+                  <div className="p-5 flex flex-col gap-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-[10px] tracking-[0.2em] uppercase mb-1" style={{ color: MINT }}>SINGER PROFILE</p>
+                        <h3 className="text-2xl font-bold text-white" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                          {profileModal.name}
+                        </h3>
+                        <p className="text-sm font-medium mt-0.5" style={{ color: MINT }}>{profileModal.career}</p>
+                      </div>
+                      <span
+                        className="flex-shrink-0 px-2.5 py-1 text-[10px] font-bold rounded-lg mt-1"
+                        style={{
+                          backgroundColor: profileModal.grade === 'premium' ? '#D4A853' : profileModal.grade === 'best' ? MINT : 'rgba(255,255,255,0.15)',
+                          color: profileModal.grade === 'standard' ? 'rgba(255,255,255,0.85)' : '#fff',
+                        }}
+                      >
+                        {profileModal.grade === 'premium' ? 'PREMIUM' : profileModal.grade === 'best' ? 'BEST' : 'STANDARD'}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {profileModal.styles.map((st) => (
+                        <span key={st} className="text-[10px] px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(91,188,180,0.15)', color: MINT, border: `1px solid ${MINT}44` }}>
+                          {FILTER_ABBR[st] ?? st}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-white/60 text-sm leading-relaxed">{profileModal.desc}</p>
+                    <a
+                      href={profileModal.profileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 text-sm text-white rounded-lg transition-all hover:opacity-90 w-fit"
+                      style={{ backgroundColor: MINT }}
+                    >
+                      프로필 보기
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                /* 사진 모달: 이미지 + 정보 가로 레이아웃 */
+                <div className="flex flex-col md:flex-row">
+                  <div className="relative w-full md:w-5/12 aspect-[3/4] md:aspect-auto md:min-h-[420px] overflow-hidden flex-shrink-0">
+                    <img
+                      src={profileModal.image}
+                      alt={profileModal.name}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    {profileModal.grade && (
+                      <span
+                        className="absolute top-4 left-4 px-3 py-1.5 text-xs font-bold rounded-lg shadow-lg"
+                        style={{
+                          backgroundColor: profileModal.grade === 'premium' ? '#D4A853' : profileModal.grade === 'best' ? MINT : 'rgba(255,255,255,0.9)',
+                          color: profileModal.grade === 'standard' ? '#333' : '#fff',
+                        }}
+                      >
+                        {profileModal.grade === 'premium' ? 'PREMIUM' : profileModal.grade === 'best' ? 'BEST' : 'STANDARD'}
+                      </span>
+                    )}
+                  </div>
+                  <div className="w-full md:w-7/12 p-6 md:p-8 flex flex-col justify-center overflow-y-auto">
+                    <p className="text-xs tracking-[0.2em] uppercase mb-3" style={{ color: MINT }}>SINGER PROFILE</p>
+                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                      {profileModal.name}
+                    </h3>
+                    <p className="text-sm md:text-base font-medium mb-4" style={{ color: MINT }}>{profileModal.career}</p>
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {profileModal.styles.map((st) => (
+                        <span key={st} className="text-[10px] px-2 py-1 rounded-full" style={{ backgroundColor: 'rgba(91,188,180,0.15)', color: MINT, border: `1px solid ${MINT}44` }}>
+                          {FILTER_ABBR[st] ?? st}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6">{profileModal.desc}</p>
+                    <a
+                      href={profileModal.profileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 text-sm text-white rounded-lg transition-all hover:opacity-90 w-fit"
+                      style={{ backgroundColor: MINT }}
+                    >
+                      프로필 보기
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              )}
               {/* 닫기 버튼 */}
               <button
                 onClick={() => setProfileModal(null)}
-                className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all"
-                style={{ backgroundColor: "rgba(0,0,0,0.5)", color: "rgba(255,255,255,0.7)" }}
+                className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all"
+                style={{ backgroundColor: 'rgba(0,0,0,0.5)', color: 'rgba(255,255,255,0.7)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.8)'; e.currentTarget.style.color = '#fff'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.5)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; }}
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
-
-              {/* 이미지 */}
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <img src={profileModal.image} alt={profileModal.name} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                {/* 등급 배지 */}
-                {(() => {
-                  const gs = gradeStyle(profileModal.grade);
-                  return (
-                    <span className="absolute top-3 left-3 px-2 py-1 rounded text-[10px] font-bold" style={{ background: gs.bg, color: gs.color }}>
-                      {gs.label}
-                    </span>
-                  );
-                })()}
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3 className="text-white text-xl font-bold" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{profileModal.name}</h3>
-                  <p className="text-white/60 text-sm mt-0.5">{profileModal.career}</p>
-                </div>
-              </div>
-
-              {/* 정보 */}
-              <div className="p-4 overflow-y-auto" style={{ maxHeight: "45vh" }}>
-                {/* 스타일 태그 */}
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {profileModal.styles.map((st) => (
-                    <span key={st} className="text-xs px-2.5 py-1 rounded-full" style={{ backgroundColor: `${MINT}20`, color: MINT, border: `1px solid ${MINT}44` }}>
-                      {st}
-                    </span>
-                  ))}
-                </div>
-
-                {/* 소개 */}
-                {profileModal.intro && (
-                  <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)" }}>
-                    {profileModal.intro}
-                  </p>
-                )}
-
-                {/* 장르 */}
-                {profileModal.genres && profileModal.genres.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-xs font-semibold mb-2" style={{ color: MINT }}>장르</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {profileModal.genres.map((g) => (
-                        <span key={g} className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.55)" }}>{g}</span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 상세 페이지 바로가기 */}
-                <a
-                  href={profileModal.profileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
-                  style={{ backgroundColor: MINT }}
-                >
-                  상세 프로필 보기 <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
             </motion.div>
           </motion.div>
         )}
