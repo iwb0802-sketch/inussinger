@@ -214,6 +214,22 @@ function ReviewSlider({ images }: { images: string[] }) {
 }
 
 /* ─── Singer Finder Button + Modal ─── */
+
+/**
+ * 싱어별 스타일 점수표 (각 항목 0~3)
+ * 감동형 / 감성형 / 가창력형 / 뮤지컬형 / 차분형 / 화려형
+ * → 설문 답변과 매칭해 변별력 있는 추천
+ */
+const SINGER_SCORE_MAP: Record<string, Record<string, number>> = {
+  "김영일": { 감동형: 1, 감성형: 3, 가창력형: 2, 뮤지컬형: 0, 차분형: 3, 화려형: 0 },
+  "제은빈": { 감동형: 2, 감성형: 1, 가창력형: 2, 뮤지컬형: 3, 차분형: 0, 화려형: 3 },
+  "박달해": { 감동형: 3, 감성형: 2, 가창력형: 2, 뮤지컬형: 0, 차분형: 2, 화려형: 1 },
+  "이윤주": { 감동형: 1, 감성형: 3, 가창력형: 1, 뮤지컬형: 2, 차분형: 2, 화려형: 2 },
+  "서동준": { 감동형: 3, 감성형: 1, 가창력형: 3, 뮤지컬형: 0, 차분형: 1, 화려형: 2 },
+  "권소이": { 감동형: 1, 감성형: 1, 가창력형: 3, 뮤지컬형: 3, 차분형: 0, 화려형: 3 },
+  "최병준": { 감동형: 2, 감성형: 2, 가창력형: 2, 뮤지컬형: 0, 차분형: 2, 화려형: 1 },
+};
+
 const FINDER_QUESTIONS = [
   {
     id: "song_style",
@@ -236,6 +252,16 @@ const FINDER_QUESTIONS = [
     ],
   },
   {
+    id: "atmosphere",
+    question: "예식 분위기는 어떤 스타일인가요?",
+    options: [
+      { label: "포근하고 따뜻한 가족 중심 예식", value: "차분형" },
+      { label: "세련되고 감각적인 모던 예식", value: "화려형" },
+      { label: "클래식하고 정통 격식 있는 예식", value: "감동형" },
+      { label: "개성 넘치고 특별한 이색 예식", value: "뮤지컬형" },
+    ],
+  },
+  {
     id: "moment",
     question: "축가 순간에 어떤 장면을 상상하세요?",
     options: [
@@ -250,9 +276,9 @@ const FINDER_QUESTIONS = [
     question: "축가 싱어를 고를 때 가장 중요한 건?",
     options: [
       { label: "감정 전달력 — 진심이 느껴지는 무대", value: "감동형" },
-      { label: "자연스러움 — 편안하고 따뜻한 분위기", value: "감성형" },
+      { label: "자연스러움 — 편안하고 따뜻한 분위기", value: "차분형" },
       { label: "실력 — 흔들림 없는 안정적인 라이브", value: "가창력형" },
-      { label: "특별함 — 다른 예식과 차별화되는 무대", value: "뮤지컬형" },
+      { label: "특별함 — 다른 예식과 차별화되는 무대", value: "화려형" },
     ],
   },
 ];
@@ -288,29 +314,38 @@ function SingerFinderButton() {
   const [profileModal, setProfileModal] = useState<typeof SINGER_PROFILES[0] | null>(null);
 
   const buildReason = (ans: string[]) => {
-    const counts: Record<string, number> = { "감동형": 0, "감성형": 0, "가창력형": 0, "뮤지컬형": 0 };
+    const counts: Record<string, number> = { "감동형": 0, "감성형": 0, "가창력형": 0, "뮤지컬형": 0, "차분형": 0, "화려형": 0 };
     ans.forEach((a) => { if (counts[a] !== undefined) counts[a]++; });
     const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
     const reasonMap: Record<string, string> = {
-      "감동형": "감동적인 무대로 하객 모두의 마음을 울리는 싱어를 추천했습니다. 진심 어린 표현과 깊은 울림으로 예식의 감동을 더해드립니다.",
-      "감성형": "잔잔하고 서정적인 분위기를 원하시는 분께 최적화된 싱어를 추천했습니다. 따뜻한 음색으로 신랑신부의 아름다운 순간을 완성합니다.",
-      "가창력형": "압도적인 라이브 실력을 갖춘 싱어를 추천했습니다. 흔들림 없는 안정적인 가창력으로 잊지 못할 무대를 선사합니다.",
-      "뮤지컬형": "드라마틱하고 특별한 퍼포먼스를 원하시는 분께 최적화된 싱어를 추천했습니다. 뮤지컬처럼 기억에 남는 축가 무대를 만들어드립니다.",
+      "감동형": "하객 모두의 마음을 울리는 진심 어린 감동 무대를 원하시는 분께 최적화된 싱어를 추천했습니다.",
+      "감성형": "잔잔하고 따뜻한 서정적 분위기를 선호하시는 분께 딱 맞는 싱어를 추천했습니다.",
+      "가창력형": "압도적인 라이브 실력과 안정적인 가창력을 원하시는 분께 최적화된 싱어를 추천했습니다.",
+      "뮤지컬형": "드라마틱하고 특별한 퍼포먼스로 예식을 차별화하고 싶은 분께 최적화된 싱어를 추천했습니다.",
+      "차분형": "포근하고 따뜻한 분위기의 예식에 자연스럽게 어울리는 싱어를 추천했습니다.",
+      "화려형": "세련되고 감각적인 예식 분위기에 완벽하게 어울리는 싱어를 추천했습니다.",
     };
     return reasonMap[top] ?? "고객님의 예식 스타일에 가장 잘 맞는 싱어를 추천했습니다.";
   };
 
   const calcResult = (ans: string[]) => {
-    const score: Record<string, number> = { "감동형": 0, "감성형": 0, "가창력형": 0, "뮤지컬형": 0 };
+    // 답변별 점수 집계
+    const score: Record<string, number> = { "감동형": 0, "감성형": 0, "가창력형": 0, "뮤지컬형": 0, "차분형": 0, "화려형": 0 };
     ans.forEach((a) => { if (score[a] !== undefined) score[a]++; });
-    const gradeWeight: Record<string, number> = { premium: 0.3, best: 0.2, standard: 0.1 };
+
+    // 싱어별 점수: SINGER_SCORE_MAP 기반으로 내적 계산 (등급 가중치 최소화)
+    const gradeBonus: Record<string, number> = { premium: 0.05, best: 0.03, standard: 0.01 };
     const singerScores = SINGER_PROFILES.map((s) => {
-      const styleScore = s.styles.reduce((sum, st) => sum + (score[st] ?? 0), 0);
-      const normalized = styleScore / s.styles.length;
-      return { singer: s, score: normalized + gradeWeight[s.grade] };
+      const map = SINGER_SCORE_MAP[s.name] ?? {};
+      const raw = Object.entries(score).reduce((sum, [key, val]) => sum + (map[key] ?? 0) * val, 0);
+      // 정규화: 최대 가능점수(각 항목 최고점×답변수)로 나누기
+      const maxPossible = Object.values(map).reduce((a, b) => a + b, 0);
+      const normalized = maxPossible > 0 ? raw / maxPossible : 0;
+      return { singer: s, score: normalized + gradeBonus[s.grade] };
     });
+
     singerScores.sort((a, b) => {
-      if (Math.abs(a.score - b.score) < 0.01) return Math.random() - 0.5;
+      if (Math.abs(a.score - b.score) < 0.005) return Math.random() - 0.5;
       return b.score - a.score;
     });
     return singerScores.slice(0, 3).map((s) => s.singer);
