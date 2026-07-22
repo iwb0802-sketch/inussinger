@@ -1433,7 +1433,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             {[
               { icon: Calendar, value: 0, displayText: "SINCE 2015", desc: "10년 이상 축적된 웨딩 진행 경험" },
-              { icon: FileText, value: 1000, suffix: "건 이상", desc: "실제 고객이 남긴 본식 후기" },
+              { icon: FileText, value: 2000, suffix: "건 이상", desc: "실제 고객이 남긴 본식 후기" },
               { icon: Users, value: 40000, suffix: "쌍 이상", desc: "오랜 시간 축적된 운영 노하우" },
             ].map((item, i) => (
               <AnimatedSection key={i} delay={i * 0.15}>
