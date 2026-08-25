@@ -90,6 +90,7 @@ const SINGER_PROFILES: { name: string; career: string; desc: string; image: stri
   { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard", styles: ["감동형", "감성형", "가창력형"], videoId: "Oq3INO5PIsU" },
   { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium", styles: ["가창력형", "뮤지컬형"], videoId: "J_QfTfWz1CI" },
   { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "standard", styles: ["감성형", "가창력형"], videoId: "Ux5ouZOgyj0" },
+  { name: "김은서", career: "축가 300회 이상", desc: "따뜻하고 감성적인 음색으로 감동을 전하는 싱어", image: "/images/singer_kimeunseo.jpg", profileUrl: "https://blog.naver.com/inusmusics/224390223975", grade: "standard", styles: ["감동형", "감성형", "뮤지컬형"], videoId: "bRstsEFr6Uk" },
 ];
 
 const SINGER_STYLE_FILTERS = [
@@ -228,6 +229,7 @@ const SINGER_SCORE_MAP: Record<string, Record<string, number>> = {
   "서동준": { 감동형: 3, 감성형: 1, 가창력형: 3, 뮤지컬형: 0, 차분형: 1, 화려형: 2 },
   "권소이": { 감동형: 1, 감성형: 1, 가창력형: 3, 뮤지컬형: 3, 차분형: 0, 화려형: 3 },
   "최병준": { 감동형: 2, 감성형: 2, 가창력형: 2, 뮤지컬형: 0, 차분형: 2, 화려형: 1 },
+  "김은서": { 감동형: 3, 감성형: 3, 가창력형: 1, 뮤지컬형: 2, 차분형: 2, 화려형: 1 },
 };
 
 const FINDER_QUESTIONS = [
