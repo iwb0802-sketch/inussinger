@@ -14,7 +14,8 @@ import {
   Mic, Music, Star, CheckCircle, Calendar, Users,
   MessageSquare, ChevronDown, ChevronLeft, ChevronRight,
   Play, Award, Shield, Heart, Phone, ExternalLink,
-  Sparkles, FileText, Headphones, Clock, MapPin, User, X
+  Sparkles, FileText, Headphones, Clock, MapPin, User, X,
+  Pause, Volume2
 } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import InusCardPopup from "@/components/InusCardPopup";
@@ -82,15 +83,15 @@ const REVIEW_IMAGES: string[] = [
 ];
 
 /* ─── Singer Profiles ─── */
-const SINGER_PROFILES: { name: string; career: string; desc: string; image: string; profileUrl: string; grade: "premium" | "best" | "standard"; styles: string[]; videoId?: string }[] = [
-  { name: "김영일", career: "축가 400회 이상", desc: "부드럽고 섬세한 음색의 감성 보컬", image: "/images/singer_kimyoungil_787db8ce.jpg", profileUrl: "https://blog.naver.com/inusmusics/220681337963", grade: "best", styles: ["감성형", "가창력형"], videoId: "EIlHbCfHUfI" },
-  { name: "제은빈", career: "축가 500회 이상", desc: "풍부한 경험과 안정적인 라이브로 사랑받는 싱어", image: "/images/singer_jeeunbin_9523ebe9.jpg", profileUrl: "https://blog.naver.com/inusmusics/223539681185", grade: "premium", styles: ["감동형", "뮤지컬형"], videoId: "FxqeCCIcRMM" },
-  { name: "박달해", career: "축가 400회 이상", desc: "따뜻한 음색으로 하객의 마음을 사로잡는 싱어", image: "/images/singer_parkdalhae_2db130ed.jpg", profileUrl: "https://blog.naver.com/inusmusics/220678041150", grade: "premium", styles: ["감동형", "가창력형"], videoId: "10dA7Bc-BvA" },
-  { name: "이윤주", career: "축가 400회 이상", desc: "다채로운 장르를 소화하는 실력파 싱어", image: "/images/singer_leeyunju_af81750f.jpg", profileUrl: "https://blog.naver.com/inusmusics/223660600728", grade: "best", styles: ["감성형", "뮤지컬형"], videoId: "t1q7eUkXVlk" },
-  { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard", styles: ["감동형", "감성형", "가창력형"], videoId: "Oq3INO5PIsU" },
-  { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium", styles: ["가창력형", "뮤지컬형"], videoId: "J_QfTfWz1CI" },
-  { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "standard", styles: ["감성형", "가창력형"], videoId: "Ux5ouZOgyj0" },
-  { name: "김은서", career: "축가 300회 이상", desc: "따뜻하고 감성적인 음색으로 감동을 전하는 싱어", image: "/images/singer_kimeunseo.jpg", profileUrl: "https://blog.naver.com/inusmusics/224390223975", grade: "standard", styles: ["감동형", "감성형", "뮤지컬형"], videoId: "bRstsEFr6Uk" },
+const SINGER_PROFILES: { name: string; career: string; desc: string; image: string; profileUrl: string; grade: "premium" | "best" | "standard"; styles: string[]; videoId?: string; audioFile?: string }[] = [
+  { name: "김영일", career: "축가 400회 이상", desc: "부드럽고 섬세한 음색의 감성 보컬", image: "/images/singer_kimyoungil_787db8ce.jpg", profileUrl: "https://blog.naver.com/inusmusics/220681337963", grade: "best", styles: ["감성형", "가창력형"], videoId: "EIlHbCfHUfI", audioFile: "/audio/singer-kimyoungil.mp3" },
+  { name: "제은빈", career: "축가 500회 이상", desc: "풍부한 경험과 안정적인 라이브로 사랑받는 싱어", image: "/images/singer_jeeunbin_9523ebe9.jpg", profileUrl: "https://blog.naver.com/inusmusics/223539681185", grade: "premium", styles: ["감동형", "뮤지컬형"], videoId: "FxqeCCIcRMM", audioFile: "/audio/singer-jeeunbin.mp3" },
+  { name: "박달해", career: "축가 400회 이상", desc: "따뜻한 음색으로 하객의 마음을 사로잡는 싱어", image: "/images/singer_parkdalhae_2db130ed.jpg", profileUrl: "https://blog.naver.com/inusmusics/220678041150", grade: "premium", styles: ["감동형", "가창력형"], videoId: "10dA7Bc-BvA", audioFile: "/audio/singer-parkdalhae.mp3" },
+  { name: "이윤주", career: "축가 400회 이상", desc: "다채로운 장르를 소화하는 실력파 싱어", image: "/images/singer_leeyunju_af81750f.jpg", profileUrl: "https://blog.naver.com/inusmusics/223660600728", grade: "best", styles: ["감성형", "뮤지컬형"], videoId: "t1q7eUkXVlk", audioFile: "/audio/singer-leeyunju.mp3" },
+  { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "standard", styles: ["감동형", "감성형", "가창력형"], videoId: "Oq3INO5PIsU", audioFile: "/audio/singer-seodongjun.mp3" },
+  { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium", styles: ["가창력형", "뮤지컬형"], videoId: "J_QfTfWz1CI", audioFile: "/audio/singer-kwonsoi.mp3" },
+  { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "standard", styles: ["감성형", "가창력형"], videoId: "Ux5ouZOgyj0", audioFile: "/audio/singer-choibyungjun.mp3" },
+  { name: "김은서", career: "축가 300회 이상", desc: "따뜻하고 감성적인 음색으로 감동을 전하는 싱어", image: "/images/singer_kimeunseo.jpg", profileUrl: "https://blog.naver.com/inusmusics/224390223975", grade: "standard", styles: ["감동형", "감성형", "뮤지컬형"], videoId: "bRstsEFr6Uk", audioFile: "/audio/singer-kimeunseo.mp3" },
 ];
 
 const SINGER_STYLE_FILTERS = [
@@ -818,6 +819,34 @@ function SingerFinderButton() {
 function SingerStyleFilter() {
   const [activeStyle, setActiveStyle] = useState("전체");
   const [selectedSinger, setSelectedSinger] = useState<typeof SINGER_PROFILES[0] | null>(null);
+  const [playing, setPlaying] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      audioRef.current?.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  const togglePlay = (name: string, src: string) => {
+    if (playing === name) {
+      audioRef.current?.pause();
+      if (audioRef.current) audioRef.current.currentTime = 0;
+      audioRef.current = null;
+      setPlaying(null);
+      return;
+    }
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    const audio = new Audio(src);
+    audio.play().catch(() => {});
+    audio.onended = () => setPlaying(null);
+    audioRef.current = audio;
+    setPlaying(name);
+  };
 
   const filtered = activeStyle === "전체"
     ? SINGER_PROFILES
@@ -942,12 +971,33 @@ function SingerStyleFilter() {
                   </div>
                 </div>
                 {/* 스타일 태그 */}
-                <div className="px-2.5 py-2 flex flex-wrap gap-1">
+                <div className="px-2.5 pt-2 flex flex-wrap gap-1">
                   {singer.styles.map((st) => (
                     <span key={st} className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(91,188,180,0.12)', color: MINT }}>
                       {FILTER_ABBR[st] ?? st}
                     </span>
                   ))}
+                </div>
+                {/* 목소리 듣기 */}
+                <div className="px-2.5 pb-2.5 pt-2">
+                  {singer.audioFile ? (
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      onClick={(e) => { e.stopPropagation(); togglePlay(singer.name, singer.audioFile!); }}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); e.preventDefault(); togglePlay(singer.name, singer.audioFile!); } }}
+                      className="flex items-center justify-center gap-1 w-full rounded-md py-[9px] text-[11px] font-semibold transition-all duration-300 cursor-pointer select-none"
+                      style={playing === singer.name
+                        ? { background: MINT, color: '#0d0d0d', border: `1px solid ${MINT}` }
+                        : { background: 'rgba(91,188,180,0.10)', color: MINT, border: '1px solid rgba(91,188,180,0.4)' }}
+                    >
+                      {playing === singer.name ? <Pause size={12} /> : <Play size={12} />}
+                      {playing === singer.name ? '재생 중' : '목소리 듣기'}
+                      {playing === singer.name && <Volume2 size={12} className="animate-pulse" />}
+                    </span>
+                  ) : (
+                    <span className="block h-[1px]" />
+                  )}
                 </div>
               </motion.button>
             );
@@ -1199,7 +1249,7 @@ function Navbar() {
 
   const navItems = [
     { label: "메인", href: "#hero" },
-    { label: "소개", href: "#intro" },
+    { label: "소개", href: "#trust" },
     { label: "싱어", href: "#singer-profiles" },
     { label: "영상", href: "#video" },
     { label: "후기", href: "#reviews" },
@@ -1419,224 +1469,50 @@ export default function Home() {
       </section>
 
       {/* ═══ TRUST INDICATORS (Dark Section) ═══ */}
-      <section id="trust" className="py-16 md:py-28" style={{ backgroundColor: DARK_BG }}>
+      <section id="trust" className="py-14 md:py-24" style={{ backgroundColor: DARK_BG }}>
         <div className="container max-w-5xl mx-auto px-5 md:px-4">
           <AnimatedSection>
             <SectionLabel en="SINCE 2015 · TRUSTED EXPERIENCE" />
-            <div className="text-center mb-10 md:mb-14">
-              <p className="text-white/60 text-xs md:text-sm mb-3">이미 수많은 신랑신부님들이 선택한</p>
+            <div className="text-center mb-8 md:mb-12">
               <h2 className="text-2xl md:text-4xl font-bold text-white leading-snug md:leading-tight" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
                 검증된 웨딩 전문 브랜드,<br />
                 <span style={{ color: MINT }}>이너스뮤직</span>입니다.
               </h2>
+              <p className="text-white/60 text-xs md:text-sm mt-3 leading-relaxed">
+                실용음악 전공 &amp; 현역 보컬리스트로 구성된<br className="md:hidden" /> 검증된 축가자와 함께합니다.
+              </p>
             </div>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-            {[
-              { icon: Calendar, value: 0, displayText: "SINCE 2015", desc: "10년 이상 축적된 웨딩 진행 경험" },
-              { icon: FileText, value: 2000, suffix: "건 이상", desc: "실제 고객이 남긴 본식 후기" },
-              { icon: Users, value: 40000, suffix: "쌍 이상", desc: "오랜 시간 축적된 운영 노하우" },
-            ].map((item, i) => (
-              <AnimatedSection key={i} delay={i * 0.15}>
-                <div className="text-center p-6 md:p-8 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-500" style={{ backgroundColor: DARK_CARD }}>
-                  <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full mb-4 md:mb-5" style={{ backgroundColor: `${MINT}20` }}>
-                    <item.icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: MINT }} />
-                  </div>
-                  <p className="text-2xl md:text-4xl font-bold mb-2 md:mb-3" style={{ color: MINT, fontFamily: "'Playfair Display', Georgia, serif" }}>
+          <AnimatedSection delay={0.15}>
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
+              {[
+                { icon: Calendar, value: 0, displayText: "SINCE 2015", desc: "10년+ 웨딩 경험" },
+                { icon: FileText, value: 2000, suffix: "건+", desc: "실제 본식 후기" },
+                { icon: Users, value: 40000, suffix: "쌍+", desc: "누적 운영 노하우" },
+              ].map((item, i) => (
+                <div key={i} className="text-center px-2 py-5 md:p-6 rounded-xl border border-white/10" style={{ backgroundColor: DARK_CARD }}>
+                  <item.icon className="w-4 h-4 md:w-5 md:h-5 mx-auto mb-2.5" style={{ color: MINT }} />
+                  <p className="text-[15px] md:text-3xl font-bold mb-1.5" style={{ color: MINT, fontFamily: "'Playfair Display', Georgia, serif" }}>
                     {item.value > 0 ? (
                       <AnimatedCounter end={item.value} suffix={item.suffix} />
                     ) : (
                       item.displayText
                     )}
                   </p>
-                  <p className="text-white/60 text-xs md:text-sm">{item.desc}</p>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-
-          <AnimatedSection delay={0.5}>
-            <div className="mt-10 md:mt-16 text-center max-w-2xl mx-auto">
-              <p className="text-white/70 leading-relaxed text-sm md:text-base">
-                결혼식 축가는 예식의 분위기와 감동을<br className="md:hidden" />
-                완성하는 가장 중요한 순간입니다.
-              </p>
-              <p className="text-white/70 leading-relaxed text-sm md:text-base mt-3">
-                이너스뮤직은 <span className="text-white font-medium">실용음악 전공 &amp; 현역 보컬리스트</span>로 구성된
-                검증된 축가자와 함께합니다.
-              </p>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.6}>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mt-8 md:mt-12">
-              {[
-                { text: "No-show 걱정 없는", sub: "철저한 인력 관리" },
-                { text: "전속 계약 시스템으로", sub: "100% 책임 진행" },
-                { text: "돌발 상황에도", sub: "완벽 대응" },
-              ].map((item, i) => (
-                <div key={i} className="text-center p-5 md:p-6 rounded-lg border border-white/5" style={{ backgroundColor: DARK_BG }}>
-                  <p className="text-white/90 text-sm md:text-base font-medium">{item.text}</p>
-                  <p className="text-sm md:text-base font-semibold mt-1.5" style={{ color: MINT }}>{item.sub}</p>
+                  <p className="text-white/60 text-[10px] md:text-sm leading-tight">{item.desc}</p>
                 </div>
               ))}
             </div>
           </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ═══ RECOMMENDATION (Dark Section with Image) ═══ */}
-      <section className="py-16 md:py-24 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={IMAGES.singer} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/75" />
-        </div>
-        <div className="container max-w-5xl mx-auto relative z-10">
-          <AnimatedSection>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-              <div>
-                <SectionLabel en="RECOMMENDATION" />
-                <h2 className="text-2xl md:text-4xl font-bold text-white mb-6 md:mb-8 leading-tight text-center lg:text-left" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-                  이런 분들께<br />
-                  <span style={{ color: MINT }}>축가를 추천</span>드립니다
-                </h2>
-              </div>
-              <div className="space-y-3 md:space-y-4">
-                {[
-                  "지인에게 맡기기엔 부담을 느끼시는 분",
-                  "완성도 높은 라이브를 원하시는 분",
-                  "예식 분위기에 맞는 축가를 고민 중이신 분",
-                  "단 한 번의 순간을 특별하게 만들고 싶으신 분",
-                ].map((text, i) => (
-                  <AnimatedSection key={i} delay={i * 0.1}>
-                    <div className="flex items-start gap-3 md:gap-4 p-3 md:p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors duration-300">
-                      <CheckCircle className="w-5 h-5 mt-0.5 shrink-0" style={{ color: MINT }} />
-                      <span className="whitespace-nowrap text-white/90 text-sm md:text-base">{text}</span>
-                    </div>
-                  </AnimatedSection>
-                ))}
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ═══ DIFFERENCE (Light Section) ═══ */}
-      <section id="intro" className="py-16 md:py-28 bg-[#f8f6f3]">
-        <div className="container max-w-5xl mx-auto">
-          <AnimatedSection>
-            <SectionLabel en="INUSMUSIC DIFFERENCE" />
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 text-center mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-              합리적인 선택, 확실한 차이
-            </h2>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-10 md:mt-12">
-            {[
-              { num: "01", title: "검증된 보컬리스트" },
-              { num: "02", title: "영상 기반 선택 시스템" },
-              { num: "03", title: "완성형 웨딩 패키지 설계" },
-            ].map((item, i) => (
-              <AnimatedSection key={i} delay={i * 0.15}>
-                <div className="p-6 md:p-8 rounded-xl bg-white border border-gray-100 hover:shadow-lg transition-all duration-500 group">
-                  <span className="text-3xl md:text-4xl font-bold text-gray-100 group-hover:text-gray-200 transition-colors" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-                    {item.num}
-                  </span>
-                  <h3 className="text-base md:text-lg font-semibold text-gray-900 mt-3 md:mt-4">{item.title}</h3>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ WEDDING PACKAGE (Dark Section) ═══ */}
-      <section className="py-16 md:py-24" style={{ backgroundColor: DARK_BG }}>
-        <div className="container max-w-4xl mx-auto">
-          <AnimatedSection>
-            <SectionLabel en="WEDDING PACKAGE" />
-            <h2 className="text-2xl md:text-4xl font-bold text-white text-center mb-6" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-              완성형 웨딩 패키지
-            </h2>
-            <div className="max-w-2xl mx-auto p-6 md:p-8 rounded-xl border border-white/10 text-center" style={{ backgroundColor: DARK_CARD }}>
-              <p className="text-xs tracking-wider text-white/40 mb-4 uppercase">참고사항</p>
-              <p className="text-white/80 text-sm md:text-base leading-relaxed">
-                사회 · 축가 · 연주 · 뮤지컬웨딩을<br />
-                <span className="text-white font-medium">각각 따로 준비하지 마세요.</span>
-              </p>
-              <p className="text-white/80 text-sm md:text-base leading-relaxed mt-2">
-                하나로 설계될 때<br />
-                <span style={{ color: MINT }} className="font-medium">예식의 흐름과 완성도가 달라집니다.</span>
-              </p>
-              <a
-                href={LINKS.package}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-6 px-6 py-2.5 text-white text-sm rounded-lg transition-all hover:opacity-90"
-                style={{ backgroundColor: MINT }}
-              >
-                완성형 패키지 자세히 보기
-              </a>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ═══ PROVIDED MATERIALS (Light Section) ═══ */}
-      <section id="service" className="py-16 md:py-28 bg-[#f8f6f3]">
-        <div className="container max-w-5xl mx-auto">
-          <AnimatedSection>
-            <SectionLabel en="PROVIDED MATERIALS" />
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 text-center mb-4" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-              예약 시 제공 자료 안내
-            </h2>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-10 md:mt-12">
-            <AnimatedSection delay={0.1}>
-              <div className="p-6 md:p-7 rounded-xl bg-white border border-gray-100">
-                <div className="flex items-center gap-3 mb-4 md:mb-5">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${MINT}15` }}>
-                    <Music className="w-5 h-5" style={{ color: MINT }} />
-                  </div>
-                  <h3 className="text-sm md:text-base font-semibold text-gray-900">축가 곡리스트 제공</h3>
-                </div>
-                <p className="text-xs md:text-sm text-gray-500 leading-relaxed">
-                  예약신청 고객님께 다양한 축가 곡리스트를 메일로 제공해드립니다.
-                  인기곡부터 감동적인 곡까지 폭넓은 선택이 가능합니다.
-                </p>
-              </div>
-            </AnimatedSection>
-
-            <AnimatedSection delay={0.2}>
-              <div className="p-6 md:p-7 rounded-xl bg-white border border-gray-100">
-                <div className="flex items-center gap-3 mb-4 md:mb-5">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${MINT}15` }}>
-                    <Headphones className="w-5 h-5" style={{ color: MINT }} />
-                  </div>
-                  <h3 className="text-sm md:text-base font-semibold text-gray-900">MR 준비 및 사전 체크</h3>
-                </div>
-                <p className="text-xs md:text-sm text-gray-500 leading-relaxed">
-                  선택하신 곡의 MR(반주) 준비부터 사전 리허설까지
-                  체계적으로 진행하여 당일 완벽한 축가를 보장합니다.
-                </p>
-              </div>
-            </AnimatedSection>
-          </div>
 
           <AnimatedSection delay={0.3}>
-            <div className="text-center mt-8">
-              <a
-                href={LINKS.kakao}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-2.5 text-white text-sm rounded-lg transition-all hover:opacity-90"
-                style={{ backgroundColor: MINT }}
-              >
-                <MessageSquare className="w-4 h-4" />
-                실시간 문의하기
-              </a>
+            <div className="flex flex-wrap justify-center gap-2 mt-6 md:mt-8">
+              {["No-show 걱정 없는 인력 관리", "전속 계약 100% 책임 진행", "돌발 상황 완벽 대응"].map((t) => (
+                <span key={t} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] md:text-xs" style={{ backgroundColor: `${MINT}14`, color: MINT, border: `1px solid ${MINT}33` }}>
+                  <CheckCircle className="w-3 h-3" /> {t}
+                </span>
+              ))}
             </div>
           </AnimatedSection>
         </div>
@@ -1699,54 +1575,27 @@ export default function Home() {
             <SingerStyleFilter />
           </AnimatedSection>
 
-          {/* 싱어 등급별 카드 (사진과 구분) */}
+          {/* 등급별 싱어 목록 바로가기 (카드 P/B/S 배지와 중복 → 링크만) */}
           <AnimatedSection delay={0.3}>
-            <div className="mt-16 md:mt-20">
-              <div className="text-center mb-8 md:mb-10">
-                <p className="text-xs tracking-[0.2em] uppercase mb-2" style={{ color: MINT }}>SINGER GRADE</p>
-                <h3 className="text-xl md:text-2xl font-bold text-white" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-                  등급별 싱어 라인업
-                </h3>
-                <p className="text-white/40 text-xs md:text-sm mt-2">
-                  각 등급별 싱어의 프로필과 축가 영상을 확인해보세요
-                </p>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-                {[
-                  { grade: "Premium", badge: "PREMIUM", desc: "최상위 프리미엄 싱어", detail: "탁월한 음색과 무대 매너를 겸비한 최고의 보컬리스트", link: LINKS.singerPremium, icon: Sparkles },
-                  { grade: "Best", badge: "BEST", desc: "인기 베스트 싱어", detail: "안정적인 가창력과 풍부한 경험을 갖춘 인기 싱어", link: LINKS.singerBest, icon: Award },
-                  { grade: "Standard", badge: "STANDARD", desc: "검증된 일반 싱어", detail: "기본기가 탄탄한 검증된 보컬리스트", link: LINKS.singerStandard, icon: Mic },
-                ].map((item, i) => (
-                  <a
-                    key={i}
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block rounded-xl border border-white/10 overflow-hidden hover:border-white/25 transition-all duration-500 group"
-                    style={{ backgroundColor: DARK_CARD }}
-                  >
-                    <div className="p-6 md:p-8 text-center">
-                      <span
-                        className="inline-block px-3 py-1 text-xs font-medium text-white rounded-full mb-4"
-                        style={{ backgroundColor: MINT }}
-                      >
-                        {item.badge}
-                      </span>
-                      <div className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: `${MINT}10` }}>
-                        <item.icon className="w-6 h-6 md:w-7 md:h-7" style={{ color: MINT }} />
-                      </div>
-                      <h3 className="text-lg md:text-xl font-bold text-white mb-1" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-                        {item.grade}
-                      </h3>
-                      <span className="text-sm md:text-base text-white/80">{item.desc}</span>
-                      <p className="text-xs text-white/40 leading-relaxed">{item.detail}</p>
-                      <span className="inline-flex items-center gap-1 mt-4 text-xs font-medium" style={{ color: MINT }}>
-                        싱어 목록 보기 <ExternalLink className="w-3 h-3" />
-                      </span>
-                    </div>
-                  </a>
-                ))}
-              </div>
+            <div className="mt-10 md:mt-14 flex flex-wrap justify-center gap-2 md:gap-3">
+              {[
+                { label: "PREMIUM 싱어 목록", link: LINKS.singerPremium, icon: Sparkles },
+                { label: "BEST 싱어 목록", link: LINKS.singerBest, icon: Award },
+                { label: "STANDARD 싱어 목록", link: LINKS.singerStandard, icon: Mic },
+              ].map((item, i) => (
+                <a
+                  key={i}
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-white/12 hover:border-white/30 transition-all duration-300 text-[11px] md:text-sm text-white/85"
+                  style={{ backgroundColor: DARK_CARD }}
+                >
+                  <item.icon className="w-3.5 h-3.5" style={{ color: MINT }} />
+                  {item.label}
+                  <ExternalLink className="w-3 h-3 text-white/35" />
+                </a>
+              ))}
             </div>
           </AnimatedSection>
         </div>
@@ -1822,6 +1671,91 @@ export default function Home() {
                 ))}
               </div>
             </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* ═══ PRICING (Light Section) ═══ */}
+      <section id="pricing" className="py-16 md:py-28 bg-[#f8f6f3]">
+        <div className="container max-w-5xl mx-auto">
+          <AnimatedSection>
+            <SectionLabel en="WEDDING VOCAL PRICING" />
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 text-center mb-10 md:mb-12" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+              축가 가격 안내
+            </h2>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.1}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* 지정 배정 */}
+              <div className="p-6 md:p-8 rounded-xl bg-white border border-gray-100 hover:shadow-lg transition-all duration-500">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-1">싱어 지정 배정</h3>
+                <p className="text-xl md:text-2xl font-bold mb-4" style={{ color: MINT, fontFamily: "'Playfair Display', Georgia, serif" }}>
+                  120,000원~180,000원
+                </p>
+                {/* 등급별 가격 */}
+                <div className="space-y-2 mb-5 p-4 rounded-lg bg-gray-50">
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-600">일반 등급</span>
+                    <span className="font-semibold text-gray-900">120,000원</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-600">베스트 등급</span>
+                    <span className="font-semibold text-gray-900">150,000원</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-600">프리미엄 등급</span>
+                    <span className="font-semibold text-gray-900">180,000원</span>
+                  </div>
+                </div>
+                <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-gray-600">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
+                    <span>원하는 싱어 직접 선택</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
+                    <span>축가 스타일 &amp; 영상 사전 확인</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
+                    <span>예식에 최적화된 맞춤형 설계</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
+                    <span>MR 준비 및 사전 리허설</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* 랜덤 배정 */}
+              <div className="p-6 md:p-8 rounded-xl bg-white border border-gray-100 hover:shadow-lg transition-all duration-500">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-1">싱어 랜덤 배정</h3>
+                <p className="text-xl md:text-2xl font-bold mb-6" style={{ color: MINT, fontFamily: "'Playfair Display', Georgia, serif" }}>
+                  100,000원
+                </p>
+                <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-gray-600">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
+                    <span>검증된 싱어 중 1인 자동 배정</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
+                    <span>예식 전주 배정 안내</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
+                    <span>안정적인 라이브 진행</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.2}>
+            <p className="text-center text-gray-400 text-xs mt-6">
+              ※ 모든 가격은 부가세 포함 금액입니다. 자세한 내용은 카카오톡 상담을 통해 확인해주세요. *서울 외 지역 출장비 별도
+            </p>
           </AnimatedSection>
         </div>
       </section>
@@ -1938,131 +1872,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══ BOOKING STATUS (Dark Section) ═══ */}
-      <section className="py-16 md:py-24" style={{ backgroundColor: DARK_BG }}>
-        <div className="container max-w-4xl mx-auto">
-          <AnimatedSection>
-            <SectionLabel en="BOOKING STATUS" />
-            <h2 className="text-2xl md:text-4xl font-bold text-white text-center mb-10 md:mb-12" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-              현재 예약 진행 상황
-            </h2>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.1}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
-              <div className="p-5 md:p-6 rounded-xl border border-white/10" style={{ backgroundColor: DARK_CARD }}>
-                <div className="flex items-center gap-3 mb-3">
-                  <Clock className="w-5 h-5" style={{ color: MINT }} />
-                  <p className="text-white/80 text-xs md:text-sm font-medium">주말 예식 / 인기 싱어</p>
-                </div>
-                <p className="text-white font-semibold text-sm md:text-base" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>평균 3개월 전 마감</p>
-              </div>
-              <div className="p-5 md:p-6 rounded-xl border border-white/10" style={{ backgroundColor: DARK_CARD }}>
-                <div className="flex items-center gap-3 mb-3">
-                  <Calendar className="w-5 h-5" style={{ color: MINT }} />
-                  <p className="text-white/80 text-xs md:text-sm font-medium">11시~2시 주요 시간대</p>
-                </div>
-                <p className="text-white font-semibold text-sm md:text-base" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>조기 마감 빈도 높음</p>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.2}>
-            <p className="text-white/50 text-xs md:text-sm text-center leading-relaxed">
-              특히 성수기 시즌에는 상담 이후 일정이 빠르게 마감되는 경우가 많습니다.<br />
-              여러 업체를 비교 중이시라면 원하시는 시간대 확보를 위해 미리 일정 확인을 권장드립니다.
-            </p>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* ═══ PRICING (Light Section) ═══ */}
-      <section id="pricing" className="py-16 md:py-28 bg-[#f8f6f3]">
-        <div className="container max-w-5xl mx-auto">
-          <AnimatedSection>
-            <SectionLabel en="WEDDING VOCAL PRICING" />
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 text-center mb-10 md:mb-12" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-              축가 가격 안내
-            </h2>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.1}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* 지정 배정 */}
-              <div className="p-6 md:p-8 rounded-xl bg-white border border-gray-100 hover:shadow-lg transition-all duration-500">
-                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-1">싱어 지정 배정</h3>
-                <p className="text-xl md:text-2xl font-bold mb-4" style={{ color: MINT, fontFamily: "'Playfair Display', Georgia, serif" }}>
-                  120,000원~180,000원
-                </p>
-                {/* 등급별 가격 */}
-                <div className="space-y-2 mb-5 p-4 rounded-lg bg-gray-50">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">일반 등급</span>
-                    <span className="font-semibold text-gray-900">120,000원</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">베스트 등급</span>
-                    <span className="font-semibold text-gray-900">150,000원</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">프리미엄 등급</span>
-                    <span className="font-semibold text-gray-900">180,000원</span>
-                  </div>
-                </div>
-                <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
-                    <span>원하는 싱어 직접 선택</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
-                    <span>축가 스타일 &amp; 영상 사전 확인</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
-                    <span>예식에 최적화된 맞춤형 설계</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
-                    <span>MR 준비 및 사전 리허설</span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* 랜덤 배정 */}
-              <div className="p-6 md:p-8 rounded-xl bg-white border border-gray-100 hover:shadow-lg transition-all duration-500">
-                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-1">싱어 랜덤 배정</h3>
-                <p className="text-xl md:text-2xl font-bold mb-6" style={{ color: MINT, fontFamily: "'Playfair Display', Georgia, serif" }}>
-                  100,000원
-                </p>
-                <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-gray-600">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
-                    <span>검증된 싱어 중 1인 자동 배정</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
-                    <span>예식 전주 배정 안내</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" style={{ color: MINT }} />
-                    <span>안정적인 라이브 진행</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.2}>
-            <p className="text-center text-gray-400 text-xs mt-6">
-              ※ 모든 가격은 부가세 포함 금액입니다. 자세한 내용은 카카오톡 상담을 통해 확인해주세요. *서울 외 지역 출장비 별도
-            </p>
-          </AnimatedSection>
-        </div>
-      </section>
-
       {/* ═══ SAFETY SYSTEM (Dark Section) ═══ */}
-      <section className="py-16 md:py-24" style={{ backgroundColor: DARK_BG }}>
+      <section className="py-14 md:py-24" style={{ backgroundColor: DARK_BG }}>
         <div className="container max-w-4xl mx-auto text-center">
           <AnimatedSection>
             <p className="text-white/50 text-xs md:text-sm mb-3">예식 당일, 가장 걱정되는 부분</p>
@@ -2070,59 +1881,48 @@ export default function Home() {
               혹시 모를 변수나<br />
               당일 진행에 대한 불안감
             </h2>
-            <p className="text-xs md:text-sm mb-10 md:mb-12" style={{ color: MINT }}>이너스뮤직은 시스템으로 대비합니다.</p>
+            <p className="text-xs md:text-sm mb-8 md:mb-10" style={{ color: MINT }}>이너스뮤직은 시스템으로 대비합니다.</p>
           </AnimatedSection>
 
           <AnimatedSection delay={0.2}>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-10 md:mb-12">
+            <div className="grid grid-cols-3 gap-2 md:gap-4 mb-8 md:mb-10">
               {[
-                { icon: Shield, title: "전속 계약 진행으로", sub: "No-show 걱정 없음" },
-                { icon: CheckCircle, title: "예식 2시간 전 / 1시간 전", sub: "이중 체크" },
-                { icon: Users, title: "예비 인력 시스템", sub: "상시 대기" },
+                { icon: Shield, title: "전속 계약 진행", sub: "No-show 없음" },
+                { icon: CheckCircle, title: "2시간·1시간 전", sub: "이중 체크" },
+                { icon: Users, title: "예비 인력", sub: "상시 대기" },
               ].map((item, i) => (
-                <div key={i} className="p-5 md:p-6 rounded-xl border border-white/10" style={{ backgroundColor: DARK_CARD }}>
-                  <item.icon className="w-7 h-7 md:w-8 md:h-8 mx-auto mb-3 md:mb-4" style={{ color: MINT }} />
-                  <p className="text-white/80 text-xs md:text-sm">{item.title}</p>
-                  <p className="font-semibold text-white text-sm md:text-base mt-1">{item.sub}</p>
+                <div key={i} className="px-2 py-5 md:p-6 rounded-xl border border-white/10" style={{ backgroundColor: DARK_CARD }}>
+                  <item.icon className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-2.5 md:mb-3" style={{ color: MINT }} />
+                  <p className="text-white/70 text-[10px] md:text-sm leading-tight">{item.title}</p>
+                  <p className="font-semibold text-white text-xs md:text-base mt-1">{item.sub}</p>
                 </div>
               ))}
             </div>
           </AnimatedSection>
 
+          {/* CTA Grid */}
           <AnimatedSection delay={0.3}>
-            <p className="text-white/60 text-xs md:text-sm leading-relaxed mb-8 md:mb-10">
-              마지막까지 안정적으로<br />
-              <span className="text-white font-medium">완성되는 예식을</span><br />
-              직접 경험하실 수 있습니다.
-            </p>
-          </AnimatedSection>
-
-          {/* CTA Grid - 가독성 개선 */}
-          <AnimatedSection delay={0.4}>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
               {[
                 { label: "실제 영상 확인", icon: Play, href: LINKS.ctaVideo },
                 { label: "카톡 상담하기", icon: MessageSquare, href: LINKS.kakao },
-                { label: "이너스 예약하기", icon: Calendar, href: LINKS.ctaReserve },
                 { label: "실제 후기 보기", icon: Star, href: LINKS.ctaReview },
-                { label: "이너스 진행이력", icon: FileText, href: LINKS.ctaHistory },
-                { label: "이너스 예약현황", icon: Clock, href: LINKS.ctaBooking },
               ].map((item, i) => (
                 <a
                   key={i}
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-2.5 p-4 md:p-5 rounded-xl border border-white/10 hover:border-white/30 transition-all duration-300 group"
+                  className="flex flex-col items-center gap-2 px-2 py-4 md:p-5 rounded-xl border border-white/10 hover:border-white/30 transition-all duration-300 group"
                   style={{ backgroundColor: DARK_CARD }}
                 >
                   <div
-                    className="w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                    className="w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                     style={{ backgroundColor: `${MINT}20` }}
                   >
                     <item.icon className="w-4 h-4 md:w-5 md:h-5" style={{ color: MINT }} />
                   </div>
-                  <span className="text-white text-sm md:text-base font-medium text-center leading-tight">
+                  <span className="text-white text-[11px] md:text-base font-medium text-center leading-tight">
                     {item.label}
                   </span>
                 </a>
@@ -2297,10 +2097,11 @@ export default function Home() {
           <AnimatedSection>
             <SectionLabel en="ADDITIONAL OPTIONS" />
             <h2 className="text-2xl md:text-4xl font-bold text-gray-900 text-center mb-3" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-              추가옵션 서비스
+              추가옵션 · 완성형 웨딩 패키지
             </h2>
-            <p className="text-gray-500 text-center text-xs md:text-sm mb-10 md:mb-12">
-              예식의 완성도를 높여줄 다양한 웨딩 서비스를 확인해보세요
+            <p className="text-gray-500 text-center text-xs md:text-sm mb-8 md:mb-10 leading-relaxed">
+              사회 · 축가 · 연주 · 뮤지컬웨딩을 각각 따로 준비하지 마세요.<br />
+              <span className="font-medium" style={{ color: MINT }}>하나로 설계될 때 예식의 흐름과 완성도가 달라집니다.</span>
             </p>
           </AnimatedSection>
 
@@ -2325,6 +2126,21 @@ export default function Home() {
                   <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
                 </a>
               ))}
+            </div>
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.2}>
+            <div className="text-center mt-8">
+              <a
+                href={LINKS.package}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 text-white text-sm rounded-lg transition-all hover:opacity-90"
+                style={{ backgroundColor: MINT }}
+              >
+                완성형 패키지 자세히 보기
+                <ExternalLink className="w-4 h-4" />
+              </a>
             </div>
           </AnimatedSection>
         </div>
