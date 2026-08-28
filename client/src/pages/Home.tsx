@@ -820,21 +820,40 @@ function SingerStyleFilter() {
   const [activeStyle, setActiveStyle] = useState("전체");
   const [selectedSinger, setSelectedSinger] = useState<typeof SINGER_PROFILES[0] | null>(null);
   const [playing, setPlaying] = useState<string | null>(null);
+  const [justFinished, setJustFinished] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
       audioRef.current?.pause();
       audioRef.current = null;
+      if (bannerTimer.current) clearTimeout(bannerTimer.current);
     };
   }, []);
 
-  const togglePlay = (name: string, src: string) => {
-    if (playing === name) {
-      audioRef.current?.pause();
-      if (audioRef.current) audioRef.current.currentTime = 0;
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
       audioRef.current = null;
-      setPlaying(null);
+    }
+    setPlaying(null);
+  };
+
+  // 모달을 열 때는 항상 mp3를 먼저 정지 (유튜브 autoplay와 소리 겹침 방지)
+  const openModal = (singer: typeof SINGER_PROFILES[0]) => {
+    stopAudio();
+    if (bannerTimer.current) clearTimeout(bannerTimer.current);
+    setJustFinished(null);
+    setSelectedSinger(selectedSinger?.name === singer.name ? null : singer);
+  };
+
+  const togglePlay = (name: string, src: string) => {
+    if (bannerTimer.current) clearTimeout(bannerTimer.current);
+    setJustFinished(null);
+    if (playing === name) {
+      stopAudio();
       return;
     }
     if (audioRef.current) {
@@ -843,7 +862,11 @@ function SingerStyleFilter() {
     }
     const audio = new Audio(src);
     audio.play().catch(() => {});
-    audio.onended = () => setPlaying(null);
+    audio.onended = () => {
+      setPlaying(null);
+      setJustFinished(name);
+      bannerTimer.current = setTimeout(() => setJustFinished(null), 9000);
+    };
     audioRef.current = audio;
     setPlaying(name);
   };
@@ -935,7 +958,7 @@ function SingerStyleFilter() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35, delay: i * 0.05 }}
-                onClick={() => setSelectedSinger(selectedSinger?.name === singer.name ? null : singer)}
+                onClick={() => openModal(singer)}
                 className="relative group rounded-xl overflow-hidden text-left transition-all duration-300"
                 style={{
                   backgroundColor: DARK_CARD,
@@ -978,26 +1001,64 @@ function SingerStyleFilter() {
                     </span>
                   ))}
                 </div>
-                {/* 목소리 듣기 */}
+                {/* 목소리 듣기 + 영상 보기 (2개 나란히) */}
                 <div className="px-2.5 pb-2.5 pt-2">
-                  {singer.audioFile ? (
+                  <div className="flex items-stretch gap-1.5">
+                    {singer.audioFile && (
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => { e.stopPropagation(); togglePlay(singer.name, singer.audioFile!); }}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); e.preventDefault(); togglePlay(singer.name, singer.audioFile!); } }}
+                        className="flex items-center justify-center gap-1 flex-1 basis-0 min-w-0 rounded-md py-[9px] text-[10.5px] font-semibold transition-all duration-300 cursor-pointer select-none"
+                        style={playing === singer.name
+                          ? { background: MINT, color: '#0d0d0d', border: `1px solid ${MINT}` }
+                          : { background: 'rgba(91,188,180,0.10)', color: MINT, border: '1px solid rgba(91,188,180,0.4)' }}
+                      >
+                        {playing === singer.name ? <Pause size={11} /> : <Play size={11} />}
+                        <span className="truncate">{playing === singer.name ? '재생 중' : '목소리 듣기'}</span>
+                        {playing === singer.name && <Volume2 size={11} className="animate-pulse flex-shrink-0" />}
+                      </span>
+                    )}
                     <span
                       role="button"
                       tabIndex={0}
-                      onClick={(e) => { e.stopPropagation(); togglePlay(singer.name, singer.audioFile!); }}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); e.preventDefault(); togglePlay(singer.name, singer.audioFile!); } }}
-                      className="flex items-center justify-center gap-1 w-full rounded-md py-[9px] text-[11px] font-semibold transition-all duration-300 cursor-pointer select-none"
-                      style={playing === singer.name
-                        ? { background: MINT, color: '#0d0d0d', border: `1px solid ${MINT}` }
-                        : { background: 'rgba(91,188,180,0.10)', color: MINT, border: '1px solid rgba(91,188,180,0.4)' }}
+                      onClick={(e) => { e.stopPropagation(); openModal(singer); }}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); e.preventDefault(); openModal(singer); } }}
+                      className="flex items-center justify-center gap-1 flex-1 basis-0 min-w-0 rounded-md py-[9px] text-[10.5px] font-semibold transition-all duration-300 cursor-pointer select-none"
+                      style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.8)', border: '1px solid rgba(255,255,255,0.18)' }}
                     >
-                      {playing === singer.name ? <Pause size={12} /> : <Play size={12} />}
-                      {playing === singer.name ? '재생 중' : '목소리 듣기'}
-                      {playing === singer.name && <Volume2 size={12} className="animate-pulse" />}
+                      <Play size={11} className="flex-shrink-0" />
+                      <span className="truncate">영상 보기</span>
                     </span>
-                  ) : (
-                    <span className="block h-[1px]" />
-                  )}
+                  </div>
+
+                  {/* 재생 종료 직후 다음 단계 유도 배너 */}
+                  <AnimatePresence>
+                    {justFinished === singer.name && (
+                      <motion.span
+                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                        animate={{ opacity: 1, height: 'auto', marginTop: 6 }}
+                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="block overflow-hidden"
+                      >
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          onClick={(e) => { e.stopPropagation(); openModal(singer); }}
+                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); e.preventDefault(); openModal(singer); } }}
+                          className="flex flex-col items-center gap-0.5 w-full rounded-md px-2 py-2 cursor-pointer select-none transition-all"
+                          style={{ background: `${MINT}1f`, border: `1px solid ${MINT}66` }}
+                        >
+                          <span className="text-[10px] leading-tight text-white/75">이 목소리 마음에 드세요?</span>
+                          <span className="flex items-center gap-1 text-[11px] font-bold leading-tight" style={{ color: MINT }}>
+                            축가 영상 보기 <ChevronRight size={11} />
+                          </span>
+                        </span>
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
                 </div>
               </motion.button>
             );
