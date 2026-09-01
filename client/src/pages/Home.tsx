@@ -1549,7 +1549,7 @@ export default function Home() {
             <div className="grid grid-cols-3 gap-2 md:gap-4">
               {[
                 { icon: Calendar, value: 0, displayText: "SINCE 2015", desc: "10년+ 웨딩 경험" },
-                { icon: FileText, value: 2000, suffix: "건+", desc: "실제 본식 후기" },
+                { icon: FileText, value: 2500, suffix: "건+", desc: "실제 누적 후기" },
                 { icon: Users, value: 40000, suffix: "쌍+", desc: "누적 운영 노하우" },
               ].map((item, i) => (
                 <div key={i} className="text-center px-2 py-5 md:p-6 rounded-xl border border-white/10" style={{ backgroundColor: DARK_CARD }}>
