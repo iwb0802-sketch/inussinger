@@ -1752,7 +1752,7 @@ export default function Home() {
               <div className="p-6 md:p-8 rounded-xl bg-white border border-gray-100 hover:shadow-lg transition-all duration-500">
                 <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-1">싱어 지정 배정</h3>
                 <p className="text-xl md:text-2xl font-bold mb-4" style={{ color: MINT, fontFamily: "'Playfair Display', Georgia, serif" }}>
-                  120,000원~180,000원
+                  180,000원~120,000원
                 </p>
                 {/* 등급별 가격 */}
                 <div className="space-y-2 mb-5 p-4 rounded-lg bg-gray-50">
