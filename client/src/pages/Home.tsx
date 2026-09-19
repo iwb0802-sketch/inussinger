@@ -1757,16 +1757,16 @@ export default function Home() {
                 {/* 등급별 가격 */}
                 <div className="space-y-2 mb-5 p-4 rounded-lg bg-gray-50">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">일반 등급</span>
-                    <span className="font-semibold text-gray-900">120,000원</span>
+                    <span className="text-gray-600">프리미엄 등급</span>
+                    <span className="font-semibold text-gray-900">180,000원</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-600">베스트 등급</span>
                     <span className="font-semibold text-gray-900">150,000원</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">프리미엄 등급</span>
-                    <span className="font-semibold text-gray-900">180,000원</span>
+                    <span className="text-gray-600">일반 등급</span>
+                    <span className="font-semibold text-gray-900">120,000원</span>
                   </div>
                 </div>
                 <ul className="space-y-2 md:space-y-3 text-xs md:text-sm text-gray-600">
