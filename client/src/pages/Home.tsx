@@ -1475,11 +1475,11 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+            className="text-[2.1rem] sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight whitespace-nowrap"
             style={{ fontFamily: "'Playfair Display', Georgia, serif", textShadow: '0 2px 20px rgba(0,0,0,0.5), 0 4px 40px rgba(0,0,0,0.3)' }}
           >
-            <span style={{ color: MINT }}>축가</span>, 감동의 깊이를<br />
-            더합니다.
+            <span style={{ color: MINT }}>축가</span> 하나로<br />
+            예식의 온도가<br className="sm:hidden" /> 바뀝니다
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
