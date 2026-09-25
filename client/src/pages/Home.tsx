@@ -1286,11 +1286,14 @@ function SingerSlider({ singers }: { singers: typeof SINGER_PROFILES }) {
 
 /* ─── Navigation ─── */
 const SERVICE_DROPDOWN = [
+  { label: "메인홈페이지", href: "https://www.inusmusic.com/" },
   { label: "결혼식사회", href: "https://www.inusmc.co.kr/" },
   { label: "클래식연주", href: "https://inusclassic.kr/" },
   { label: "재즈연주", href: "https://inusjazz.kr/" },
   { label: "뮤지컬웨딩", href: "https://inusmw.kr/" },
   { label: "모바일청첩장", href: "https://inuscard.com/" },
+  { label: "음원편집", href: "https://www.inusmusic.com/audio", isNew: true },
+  { label: "식전영상제작", href: "https://prewedding-video-renderer-production.up.railway.app/editor", isNew: true },
   { label: "완성패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
 ];
 
@@ -1373,9 +1376,14 @@ function Navbar() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setServiceOpen(false)}
-                      className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                      className="flex items-center gap-1.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
                     >
                       {item.label}
+                      {item.isNew && (
+                        <span className="px-1.5 py-0.5 text-[9px] font-bold rounded-full text-white leading-none" style={{ backgroundColor: MINT }}>
+                          NEW
+                        </span>
+                      )}
                     </a>
                   ))}
                 </motion.div>
@@ -1435,9 +1443,14 @@ function Navbar() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => { setMobileOpen(false); setMobileServiceOpen(false); }}
-                      className="flex items-center px-10 py-2.5 text-sm text-gray-600 hover:text-gray-900"
+                      className="flex items-center gap-1.5 px-10 py-2.5 text-sm text-gray-600 hover:text-gray-900"
                     >
                       {item.label}
+                      {item.isNew && (
+                        <span className="px-1.5 py-0.5 text-[9px] font-bold rounded-full text-white leading-none" style={{ backgroundColor: MINT }}>
+                          NEW
+                        </span>
+                      )}
                     </a>
                   ))}
                 </div>
