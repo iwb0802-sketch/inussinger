@@ -94,6 +94,13 @@ const SINGER_PROFILES: { name: string; career: string; desc: string; image: stri
   { name: "김은서", career: "축가 300회 이상", desc: "따뜻하고 감성적인 음색으로 감동을 전하는 싱어", image: "/images/singer_kimeunseo.jpg", profileUrl: "https://blog.naver.com/inusmusics/224390223975", grade: "standard", styles: ["감동형", "감성형", "뮤지컬형"], videoId: "bRstsEFr6Uk", audioFile: "/audio/singer-kimeunseo.mp3" },
 ];
 
+// 등급별 선정 기준 및 배지 스타일
+const GRADE_INFO: Record<"premium" | "best" | "standard", { label: string; criteria: string; color: string; textColor: string }> = {
+  premium: { label: "PREMIUM", criteria: "축가 경력 8년 이상", color: "#D4A853", textColor: "#fff" },
+  best: { label: "BEST", criteria: "축가 경력 5년 이상", color: MINT, textColor: "#fff" },
+  standard: { label: "STANDARD", criteria: "축가 경력 3년 이상", color: "rgba(255,255,255,0.15)", textColor: "rgba(255,255,255,0.85)" },
+};
+
 const SINGER_STYLE_FILTERS = [
   { key: "전체", label: "전체", desc: "" },
   { key: "감동형", label: "감동형", desc: "진한 감성과 몰입감 있는 무대" },
@@ -1448,6 +1455,7 @@ function Navbar() {
 
 /* ─── Main Page ─── */
 export default function Home() {
+  const [gradeModal, setGradeModal] = useState<"premium" | "best" | "standard" | null>(null);
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -1636,26 +1644,23 @@ export default function Home() {
             <SingerStyleFilter />
           </AnimatedSection>
 
-          {/* 등급별 싱어 목록 바로가기 (카드 P/B/S 배지와 중복 → 링크만) */}
+          {/* 등급별 싱어 목록 바로가기 (클릭 시 명단+선정기준 모달 → 블로그 이동) */}
           <AnimatedSection delay={0.3}>
             <div className="mt-10 md:mt-14 flex flex-wrap justify-center gap-2 md:gap-3">
               {[
-                { label: "PREMIUM 싱어 목록", link: LINKS.singerPremium, icon: Sparkles },
-                { label: "BEST 싱어 목록", link: LINKS.singerBest, icon: Award },
-                { label: "STANDARD 싱어 목록", link: LINKS.singerStandard, icon: Mic },
+                { label: "PREMIUM 싱어 목록", grade: "premium" as const, icon: Sparkles },
+                { label: "BEST 싱어 목록", grade: "best" as const, icon: Award },
+                { label: "STANDARD 싱어 목록", grade: "standard" as const, icon: Mic },
               ].map((item, i) => (
-                <a
+                <button
                   key={i}
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={() => setGradeModal(item.grade)}
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-white/12 hover:border-white/30 transition-all duration-300 text-[11px] md:text-sm text-white/85"
                   style={{ backgroundColor: DARK_CARD }}
                 >
                   <item.icon className="w-3.5 h-3.5" style={{ color: MINT }} />
                   {item.label}
-                  <ExternalLink className="w-3 h-3 text-white/35" />
-                </a>
+                </button>
               ))}
             </div>
           </AnimatedSection>
@@ -2231,6 +2236,101 @@ export default function Home() {
           <p className="text-xs text-white/20 mt-4">&copy; {new Date().getFullYear()} INUSMUSIC. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* ── 등급별 싱어 명단 모달 (선정 기준 + 명단 → 블로그 이동) ── */}
+      <AnimatePresence>
+        {gradeModal && (
+          <motion.div
+            key="grade-modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+            style={{ backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
+            onClick={() => setGradeModal(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+              className="relative w-full max-w-lg overflow-hidden rounded-2xl"
+              style={{ backgroundColor: DARK_CARD, maxHeight: '85vh', overflowY: 'auto' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setGradeModal(null)}
+                className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full text-white/60 hover:text-white transition-colors"
+                style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="p-6 md:p-8">
+                <div className="flex items-center gap-3 mb-2">
+                  <span
+                    className="px-3 py-1.5 text-xs font-bold rounded-lg"
+                    style={{ backgroundColor: GRADE_INFO[gradeModal].color, color: GRADE_INFO[gradeModal].textColor }}
+                  >
+                    {GRADE_INFO[gradeModal].label}
+                  </span>
+                  <p className="text-white/50 text-xs md:text-sm">{GRADE_INFO[gradeModal].criteria}</p>
+                </div>
+                <h3 className="text-xl md:text-2xl font-bold text-white mt-3 mb-5" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                  {GRADE_INFO[gradeModal].label} 싱어 명단
+                </h3>
+
+                {/* 선정 기준 안내 */}
+                <div className="rounded-xl p-4 mb-6 space-y-2.5" style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <p className="text-[11px] md:text-xs text-white/40 mb-1">이너스뮤직 싱어 등급 선정 기준</p>
+                  {(["premium", "best", "standard"] as const).map((g) => (
+                    <div key={g} className="flex items-center gap-2.5">
+                      <span
+                        className="w-[74px] flex-shrink-0 text-center px-2 py-1 text-[10px] font-bold rounded-md"
+                        style={{
+                          backgroundColor: GRADE_INFO[g].color,
+                          color: GRADE_INFO[g].textColor,
+                          opacity: g === gradeModal ? 1 : 0.4,
+                        }}
+                      >
+                        {GRADE_INFO[g].label}
+                      </span>
+                      <span className={`text-xs md:text-sm ${g === gradeModal ? "text-white font-medium" : "text-white/35"}`}>
+                        {GRADE_INFO[g].criteria}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 명단 */}
+                <div className="space-y-2 mb-6">
+                  {SINGER_PROFILES.filter((s) => s.grade === gradeModal).map((s) => (
+                    <div key={s.name} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}>
+                      <img src={s.image} alt={s.name} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                      <div>
+                        <p className="text-sm font-semibold text-white">{s.name}</p>
+                        <p className="text-[11px] text-white/40">{s.career}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <a
+                  href={gradeModal === "premium" ? LINKS.singerPremium : gradeModal === "best" ? LINKS.singerBest : LINKS.singerStandard}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 text-sm text-white rounded-xl font-medium transition-all hover:opacity-90"
+                  style={{ backgroundColor: MINT }}
+                >
+                  블로그에서 전체 프로필 보기
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
