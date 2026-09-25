@@ -92,10 +92,14 @@ const SINGER_PROFILES: { name: string; career: string; desc: string; image: stri
   { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium", styles: ["가창력형", "뮤지컬형"], videoId: "J_QfTfWz1CI", audioFile: "/audio/singer-kwonsoi.mp3" },
   { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "best", styles: ["감성형", "가창력형"], videoId: "Ux5ouZOgyj0", audioFile: "/audio/singer-choibyungjun.mp3" },
   { name: "김은서", career: "축가 300회 이상", desc: "따뜻하고 감성적인 음색으로 감동을 전하는 싱어", image: "/images/singer_kimeunseo.jpg", profileUrl: "https://blog.naver.com/inusmusics/224390223975", grade: "standard", styles: ["감동형", "감성형", "뮤지컬형"], videoId: "bRstsEFr6Uk", audioFile: "/audio/singer-kimeunseo.mp3" },
-  { name: "임세라", career: "축가 400회 이상", desc: "안정적인 가창력과 깊이 있는 감정선으로 완성도 높은 축가를 선사하는 싱어", image: "/images/singer_imseira.jpg", profileUrl: "https://blog.naver.com/inusmusics/223211308858", grade: "best", styles: ["감성형", "가창력형"] },
-  { name: "김지유", career: "축가 300회 이상", desc: "밝고 안정적인 음색으로 예식의 분위기를 살리는 싱어", image: "/images/singer_kimjiyu.jpg", profileUrl: "https://blog.naver.com/inusmusics/224364243738", grade: "standard", styles: ["감성형"] },
-  { name: "김지우", career: "축가 300회 이상", desc: "감성적인 라이브로 몰입감 있는 무대를 선사하는 싱어", image: "/images/singer_kimjiwoo.jpg", profileUrl: "https://blog.naver.com/inusmusics/223267498362", grade: "standard", styles: ["감성형"] },
-  { name: "김대희", career: "축가 300회 이상", desc: "부드러운 음색과 안정적인 라이브로 신뢰감을 주는 싱어", image: "/images/singer_kimdaehee.jpg", profileUrl: "https://blog.naver.com/inusmusics/221255817456", grade: "standard", styles: ["감성형"] },
+];
+
+// 등급별 "명단" 모달에만 노출되는 추가 인원 (메인 싱어 선택 그리드/슬라이더에는 노출하지 않음)
+const ROSTER_ONLY_SINGERS: { name: string; career: string; image: string; grade: "premium" | "best" | "standard" }[] = [
+  { name: "임세라", career: "축가 400회 이상", image: "/images/singer_imseira.jpg", grade: "best" },
+  { name: "김지유", career: "축가 300회 이상", image: "/images/singer_kimjiyu.jpg", grade: "standard" },
+  { name: "김지우", career: "축가 300회 이상", image: "/images/singer_kimjiwoo.jpg", grade: "standard" },
+  { name: "김대희", career: "축가 300회 이상", image: "/images/singer_kimdaehee.jpg", grade: "standard" },
 ];
 
 // 등급별 선정 기준 및 배지 스타일
@@ -2309,7 +2313,7 @@ export default function Home() {
 
                 {/* 명단 */}
                 <div className="space-y-2 mb-6">
-                  {SINGER_PROFILES.filter((s) => s.grade === gradeModal).map((s) => (
+                  {[...SINGER_PROFILES.filter((s) => s.grade === gradeModal), ...ROSTER_ONLY_SINGERS.filter((s) => s.grade === gradeModal)].map((s) => (
                     <div key={s.name} className="flex items-center gap-3 p-2.5 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}>
                       <img src={s.image} alt={s.name} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
                       <div>
