@@ -2194,14 +2194,7 @@ export default function Home() {
 
           <AnimatedSection delay={0.1}>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
-              {[
-                { title: "결혼식 사회", href: "https://www.inusmc.co.kr/" },
-                { title: "클래식 연주", href: "https://inusclassic.kr/" },
-                { title: "재즈 연주", href: "https://inusjazz.kr/" },
-                { title: "뮤지컬 웨딩", href: "https://inusmw.kr/" },
-                { title: "모바일 청첩장", href: "https://inuscard.com/" },
-                { title: "완성 패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
-              ].map((item, i) => (
+              {SERVICE_DROPDOWN.map((item, i) => (
                 <a
                   key={i}
                   href={item.href}
@@ -2209,7 +2202,14 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-5 md:p-6 rounded-xl bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 group"
                 >
-                  <span className="text-sm md:text-base font-semibold text-gray-900 group-hover:text-gray-700">{item.title}</span>
+                  <span className="text-sm md:text-base font-semibold text-gray-900 group-hover:text-gray-700 flex items-center gap-1.5">
+                    {item.label}
+                    {item.isNew && (
+                      <span className="px-1.5 py-0.5 text-[9px] font-bold rounded-full text-white leading-none" style={{ backgroundColor: MINT }}>
+                        NEW
+                      </span>
+                    )}
+                  </span>
                   <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
                 </a>
               ))}
