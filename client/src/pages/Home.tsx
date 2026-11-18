@@ -89,7 +89,7 @@ const SINGER_PROFILES: { name: string; career: string; desc: string; image: stri
   { name: "박달해", career: "축가 400회 이상", desc: "따뜻한 음색으로 하객의 마음을 사로잡는 싱어", image: "/images/singer_parkdalhae_2db130ed.jpg", profileUrl: "https://blog.naver.com/inusmusics/220678041150", grade: "premium", styles: ["감동형", "가창력형"], videoId: "10dA7Bc-BvA", audioFile: "/audio/singer-parkdalhae.mp3" },
   { name: "이윤주", career: "축가 400회 이상", desc: "다채로운 장르를 소화하는 실력파 싱어", image: "/images/singer_leeyunju_af81750f.jpg", profileUrl: "https://blog.naver.com/inusmusics/223660600728", grade: "best", styles: ["감성형", "뮤지컬형"], videoId: "t1q7eUkXVlk", audioFile: "/audio/singer-leeyunju.mp3" },
   { name: "서동준", career: "축가 300회 이상", desc: "깊은 울림의 보컬로 감동을 선사하는 싱어", image: "/images/singer_seodongjun_059211c6.jpg", profileUrl: "https://blog.naver.com/inusmusics/223969101745", grade: "best", styles: ["감동형", "감성형", "가창력형"], videoId: "Oq3INO5PIsU", audioFile: "/audio/singer-seodongjun.mp3" },
-  { name: "권소이", career: "축가 500회 이상", desc: "풍부한 감성과 안정적인 라이브로 사랑받는 프리미엄 싱어", image: "/images/singer_kwonsoi.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307108463", grade: "premium", styles: ["가창력형", "뮤지컬형"], videoId: "J_QfTfWz1CI", audioFile: "/audio/singer-kwonsoi.mp3" },
+  { name: "한재원", career: "축가 300회 이상", desc: "맑고 고운 미성과 섬세한 감정 표현이 돋보이는 싱어", image: "/images/singer_hanjaewon.jpg", profileUrl: "https://blog.naver.com/inusmusics/224482691185", grade: "best", styles: ["감성형", "가창력형"], videoId: "JV1wwc3DzfY", audioFile: "/audio/singer-hanjaewon.mp3" },
   { name: "최병준", career: "축가 300회 이상", desc: "탄탄한 기본기와 진심 어린 무대로 감동을 전하는 싱어", image: "/images/singer_choibyungjun.jpg", profileUrl: "https://blog.naver.com/inusmusics/224307114690", grade: "best", styles: ["감성형", "가창력형"], videoId: "Ux5ouZOgyj0", audioFile: "/audio/singer-choibyungjun.mp3" },
   { name: "김은서", career: "축가 300회 이상", desc: "따뜻하고 감성적인 음색으로 감동을 전하는 싱어", image: "/images/singer_kimeunseo.jpg", profileUrl: "https://blog.naver.com/inusmusics/224390223975", grade: "standard", styles: ["감동형", "감성형", "뮤지컬형"], videoId: "bRstsEFr6Uk", audioFile: "/audio/singer-kimeunseo.mp3" },
 ];
@@ -243,7 +243,7 @@ const SINGER_SCORE_MAP: Record<string, Record<string, number>> = {
   "박달해": { 감동형: 3, 감성형: 2, 가창력형: 2, 뮤지컬형: 0, 차분형: 2, 화려형: 1 },
   "이윤주": { 감동형: 1, 감성형: 3, 가창력형: 1, 뮤지컬형: 2, 차분형: 2, 화려형: 2 },
   "서동준": { 감동형: 3, 감성형: 1, 가창력형: 3, 뮤지컬형: 0, 차분형: 1, 화려형: 2 },
-  "권소이": { 감동형: 1, 감성형: 1, 가창력형: 3, 뮤지컬형: 3, 차분형: 0, 화려형: 3 },
+  "한재원": { 감동형: 2, 감성형: 3, 가창력형: 3, 뮤지컬형: 1, 차분형: 2, 화려형: 0 },
   "최병준": { 감동형: 2, 감성형: 2, 가창력형: 2, 뮤지컬형: 0, 차분형: 2, 화려형: 1 },
   "김은서": { 감동형: 3, 감성형: 3, 가창력형: 1, 뮤지컬형: 2, 차분형: 2, 화려형: 1 },
 };
