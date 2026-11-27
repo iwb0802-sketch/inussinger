@@ -21,6 +21,8 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 import InusCardPopup from "@/components/InusCardPopup";
 import FloatingButtonsNew from "@/components/FloatingButtons";
 import QuickNav from "@/components/QuickNav";
+import HeroProof from "@/components/brand/HeroProof";
+import ServiceCrossNav from "@/components/brand/ServiceCrossNav";
 
 /* ─── Image URLs ─── */
 const IMAGES = {
@@ -38,7 +40,7 @@ const DARK_CARD = "#222222";
 /* ─── Links ─── */
 const LINKS = {
   kakao: "https://pf.kakao.com/_wxovaM/chat",
-  package: "https://blog.naver.com/inusmusics/220652965646",
+  package: "https://www.inusmusic.com/package",
   reviewAll: "http://musicin.godohosting.com/bbs/board.php?bo_table=forum",
   singerPremium: "https://blog.naver.com/PostThumbnailList.nhn?blogId=inusmusics&from=postList&categoryNo=60",
   singerBest: "https://blog.naver.com/PostThumbnailList.nhn?blogId=inusmusics&from=postList&categoryNo=70",
@@ -1287,14 +1289,14 @@ function SingerSlider({ singers }: { singers: typeof SINGER_PROFILES }) {
 /* ─── Navigation ─── */
 const SERVICE_DROPDOWN = [
   { label: "메인홈페이지", href: "https://www.inusmusic.com/" },
-  { label: "결혼식사회", href: "https://www.inusmc.co.kr/" },
-  { label: "클래식연주", href: "https://inusclassic.kr/" },
+  { label: "결혼식사회", href: "https://inusmc.co.kr" },
+  { label: "클래식연주", href: "https://www.inusclassic.kr" },
   { label: "재즈연주", href: "https://inusjazz.kr/" },
-  { label: "뮤지컬웨딩", href: "https://inusmw.kr/" },
+  { label: "뮤지컬웨딩", href: "https://www.inusmw.kr" },
   { label: "모바일청첩장", href: "https://inuscard.com/" },
   { label: "음원편집", href: "https://www.inusmusic.com/audio", isNew: true },
   { label: "식전영상제작", href: "https://prewedding-video-renderer-production.up.railway.app/editor", isNew: true },
-  { label: "완성패키지", href: "https://blog.naver.com/inusmusics/220652965646" },
+  { label: "완성패키지", href: "https://www.inusmusic.com/package" },
 ];
 
 function Navbar() {
@@ -1478,7 +1480,7 @@ function Navbar() {
 export default function Home() {
   const [gradeModal, setGradeModal] = useState<"premium" | "best" | "standard" | null>(null);
   return (
-    <div className="min-h-screen">
+    <div className="svc-page min-h-screen">
       <Navbar />
       <FloatingButtonsNew />
       <QuickNav />
@@ -1489,6 +1491,7 @@ export default function Home() {
         <div className="absolute inset-0">
           <img src={IMAGES.hero} alt="웨딩 축가 현장" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70" />
+          <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(0,0,0,0.28), transparent 75%)" }} />
         </div>
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
           <motion.p
@@ -1545,12 +1548,20 @@ export default function Home() {
               자세히 알아보기
             </a>
           </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="mt-6 sm:mt-8"
+          >
+            <HeroProof pricingHref="#pricing" />
+          </motion.div>
           <motion.a
             href="#trust"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.2 }}
-            className="absolute bottom-10 flex flex-col items-center gap-2 text-white/50 hover:text-white/70 transition-colors"
+            className="absolute bottom-10 hidden flex-col items-center gap-2 text-white/50 hover:text-white/70 transition-colors"
           >
             <span className="text-xs tracking-[0.2em] uppercase">SCROLL</span>
             <ChevronDown className="w-5 h-5 animate-bounce" />
@@ -1841,7 +1852,7 @@ export default function Home() {
 
           <AnimatedSection delay={0.2}>
             <p className="text-center text-gray-400 text-xs mt-6">
-              ※ 모든 가격은 부가세 포함 금액입니다. 자세한 내용은 카카오톡 상담을 통해 확인해주세요. *서울 외 지역 출장비 별도
+              ※ 모든 가격은 부가세 포함 금액이며, 서울 외 지역은 출장비가 별도입니다. 자세한 내용은 카카오톡 상담에서 확인해 주세요.
             </p>
           </AnimatedSection>
         </div>
@@ -2039,7 +2050,7 @@ export default function Home() {
                 <ul className="space-y-3 text-xs md:text-sm text-gray-600">
                   <li className="flex items-start gap-2">
                     <span style={{ color: MINT }}>•</span>
-                    <span>최대 <strong style={{ color: MINT }}>2만원 할인</strong> 혜택</span>
+                    <span><strong style={{ color: MINT }}>2만원 할인</strong> 혜택</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span style={{ color: MINT }}>•</span>
@@ -2184,17 +2195,21 @@ export default function Home() {
           <AnimatedSection>
             <SectionLabel en="ADDITIONAL OPTIONS" />
             <h2 className="text-2xl md:text-4xl font-bold text-gray-900 text-center mb-3" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-              추가옵션 · 완성형 웨딩 패키지
+              추가옵션
             </h2>
-            <p className="text-gray-500 text-center text-xs md:text-sm mb-8 md:mb-10 leading-relaxed">
-              사회 · 축가 · 연주 · 뮤지컬웨딩을 각각 따로 준비하지 마세요.<br />
-              <span className="font-medium" style={{ color: MINT }}>하나로 설계될 때 예식의 흐름과 완성도가 달라집니다.</span>
+            <p className="text-gray-500 text-center text-xs md:text-sm mb-8 md:mb-10 leading-relaxed break-keep">
+              축가에 더해 예식 준비를 덜어 드리는 옵션입니다.
             </p>
           </AnimatedSection>
 
           <AnimatedSection delay={0.1}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
-              {SERVICE_DROPDOWN.map((item, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+              {[
+                { title: "모바일 청첩장", href: "https://inuscard.com/" },
+                { title: "음원 편집", href: "https://www.inusmusic.com/audio" },
+                { title: "식전영상 제작", href: "https://prewedding-video-renderer-production.up.railway.app/editor" },
+                { title: "완성 패키지", href: LINKS.package },
+              ].map((item, i) => (
                 <a
                   key={i}
                   href={item.href}
@@ -2202,36 +2217,16 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-5 md:p-6 rounded-xl bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 group"
                 >
-                  <span className="text-sm md:text-base font-semibold text-gray-900 group-hover:text-gray-700 flex items-center gap-1.5">
-                    {item.label}
-                    {item.isNew && (
-                      <span className="px-1.5 py-0.5 text-[9px] font-bold rounded-full text-white leading-none" style={{ backgroundColor: MINT }}>
-                        NEW
-                      </span>
-                    )}
-                  </span>
+                  <span className="text-sm md:text-base font-semibold text-gray-900 group-hover:text-gray-700 whitespace-nowrap">{item.title}</span>
                   <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
                 </a>
               ))}
             </div>
           </AnimatedSection>
-
-          <AnimatedSection delay={0.2}>
-            <div className="text-center mt-8">
-              <a
-                href={LINKS.package}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 text-white text-sm rounded-lg transition-all hover:opacity-90"
-                style={{ backgroundColor: MINT }}
-              >
-                완성형 패키지 자세히 보기
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </div>
-          </AnimatedSection>
         </div>
       </section>
+
+      <ServiceCrossNav current="singer" background="#111111" />
 
       {/* ═══ FOOTER ═══ */}
       <footer className="py-10 md:py-12" style={{ backgroundColor: "#111111" }}>
@@ -2254,7 +2249,7 @@ export default function Home() {
             <p className="text-[11px] md:text-xs text-white/30">사무실 주소: 서울 광진구 자양로 165 4층</p>
             <p className="text-[11px] md:text-xs text-white/30">TEL: 02-423-2772</p>
           </div>
-          <p className="text-xs text-white/20 mt-4">&copy; {new Date().getFullYear()} INUSMUSIC. All rights reserved.</p>
+          <p className="text-xs text-white/20 mt-4">&copy; 2015-{new Date().getFullYear()} INUSMUSIC. All rights reserved.</p>
         </div>
       </footer>
 
