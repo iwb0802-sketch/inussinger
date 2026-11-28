@@ -49,7 +49,7 @@ export default function InusCardPopup() {
           className="flex items-center gap-2 pl-3.5 pr-2.5 py-2 rounded-full border border-[#d9b86c]/50 bg-[#0d0a07]/90 text-xs font-semibold text-[#f0e6c8] backdrop-blur transition hover:border-[#d9b86c]/80 hover:bg-[#0d0a07]"
         >
           <span className="text-[#9ed4c0] text-[10px] tracking-[0.18em] uppercase font-bold">NEW</span>
-          <span>모바일 청첩장</span>
+          <span className="flex flex-col items-start leading-tight"><span>모바일 청첩장</span><span className="text-[10px] font-medium text-[#9ed4c0]">예약 고객 무료 혜택</span></span>
           {expanded
             ? <ChevronUp size={12} className="text-[#d9b86c]/70" />
             : <ChevronDown size={12} className="text-[#d9b86c]/70" />
@@ -81,15 +81,15 @@ export default function InusCardPopup() {
               이너스뮤직 모바일 청첩장
             </h3>
             <p className="mt-1.5 text-sm leading-6 text-[#d7ccb4]/75">
-              예약 고객님께 제작을 지원해 드립니다.
+              이너스뮤직에 예약을 완료하신 고객님께 무료로 제공해 드립니다.
             </p>
           </div>
 
           {/* 혜택 안내 */}
           <div className="px-5 py-4 space-y-2.5">
             {[
-              "이너스뮤직 예약 고객님 전용 혜택",
-              "감성적인 모바일 청첩장 제작 지원",
+              "예약 완료 고객님만을 위한 특별 혜택",
+              "감성적인 모바일 청첩장 무료 제작",
               "카카오톡 공유 · URL 발송 지원",
             ].map((item) => (
               <div key={item} className="flex items-start gap-2.5">

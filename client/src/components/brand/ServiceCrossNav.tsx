@@ -7,8 +7,8 @@ import { ChevronRight } from "lucide-react";
 
 type Key = "classic" | "jazz" | "musical" | "mc" | "singer";
 
-const EXTRAS: { en: string; ko: string; desc: string; href: string; isNew?: boolean }[] = [
-  { en: "Mobile Invitation", ko: "모바일 청첩장", desc: "이너스뮤직이 만드는 감성 모바일 청첩장. 20만원 이상 예약 고객께 제작을 지원해 드립니다.", href: "https://inuscard.com" },
+const EXTRAS: { en: string; ko: string; desc: string; href: string; isNew?: boolean; badge?: string }[] = [
+  { en: "Mobile Invitation", ko: "모바일 청첩장", desc: "이너스뮤직이 만드는 감성 모바일 청첩장. 예약을 완료하신 고객님께만 무료로 제공해 드리는 특별 혜택입니다.", href: "https://inuscard.com", badge: "예약 고객 무료" },
   { en: "Audio Editing", ko: "음원 편집", desc: "축가·행사에 사용할 음원을 원하는 구간과 톤으로 편집해 드리는 서비스입니다.", href: "https://www.inusmusic.com/audio", isNew: true },
   { en: "Pre-wedding Video", ko: "식전영상 제작", desc: "예식 전 상영할 영상을 온라인 에디터로 손쉽게 제작할 수 있는 서비스입니다.", href: "https://prewedding-video-renderer-production.up.railway.app/editor", isNew: true },
 ];
@@ -102,6 +102,7 @@ export default function ServiceCrossNav({ current, background = "#0D0E12" }: { c
                   <p className="flex items-center gap-2 text-base font-semibold" style={{ fontFamily: "'Noto Serif KR', serif", color: "#F0EFE9" }}>
                     {x.ko}
                     {x.isNew && <span className="rounded-full px-1.5 py-0.5 text-[9px] font-bold tracking-wide leading-none" style={{ backgroundColor: "rgba(201,169,110,0.2)", color: "#C9A96E" }}>NEW</span>}
+                    {x.badge && <span className="rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide leading-none whitespace-nowrap" style={{ backgroundColor: "rgba(91,181,162,0.16)", color: "#5BB5A2" }}>{x.badge}</span>}
                   </p>
                   <p className="mt-1 md:mt-2 text-xs leading-relaxed break-keep text-pretty" style={{ color: "#8A8B93", wordBreak: "keep-all" }}>{x.desc}</p>
                 </div>
