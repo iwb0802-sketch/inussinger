@@ -8,7 +8,7 @@ import { ChevronRight } from "lucide-react";
 type Key = "classic" | "jazz" | "musical" | "mc" | "singer";
 
 const ITEMS: { key: Key; en: string; ko: string; desc: string; href: string; img: string }[] = [
-  { key: "mc", en: "Wedding MC", ko: "결혼식 사회", desc: "사회자 18인 중, 예식에 맞는 한 사람", href: "https://inusmc.co.kr", img: "/images/service-mc.webp" },
+  { key: "mc", en: "Wedding MC", ko: "결혼식 사회", desc: "사회자 18인 중, 예식에 맞는 한 사람", href: "https://inusmc.co.kr", img: "https://uyhtppjapcdmaekfixve.supabase.co/storage/v1/object/public/inusmusic-assets/AuYlivFZrjsDexsU.webp" },
   { key: "classic", en: "Classic", ko: "클래식 연주", desc: "공간의 격을 높이는 현악 · 피아노", href: "https://www.inusclassic.kr", img: "/images/service-classic.webp" },
   { key: "jazz", en: "Jazz", ko: "재즈 연주", desc: "식전부터 행진까지 흐르는 라이브", href: "https://inusjazz.kr", img: "/images/service-jazz.webp" },
   { key: "musical", en: "Musical Wedding", ko: "뮤지컬웨딩", desc: "예식이 한 편의 공연이 되는 순간", href: "https://www.inusmw.kr", img: "/images/service-musical.webp" },
