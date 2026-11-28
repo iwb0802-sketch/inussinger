@@ -12,7 +12,6 @@ const SECTIONS = [
   { id: "singer-profiles",  label: "싱어" },
   { id: "video",            label: "영상" },
   { id: "pricing",          label: "요금" },
-  { id: "additional-options", label: "추가옵션" },
 ];
 
 export default function QuickNav() {

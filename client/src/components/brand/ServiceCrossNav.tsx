@@ -7,6 +7,12 @@ import { ChevronRight } from "lucide-react";
 
 type Key = "classic" | "jazz" | "musical" | "mc" | "singer";
 
+const EXTRAS: { en: string; ko: string; desc: string; href: string; isNew?: boolean }[] = [
+  { en: "Mobile Invitation", ko: "모바일 청첩장", desc: "이너스뮤직이 만드는 감성 모바일 청첩장. 20만원 이상 예약 고객께 제작을 지원해 드립니다.", href: "https://inuscard.com" },
+  { en: "Audio Editing", ko: "음원 편집", desc: "축가·행사에 사용할 음원을 원하는 구간과 톤으로 편집해 드리는 서비스입니다.", href: "https://www.inusmusic.com/audio", isNew: true },
+  { en: "Pre-wedding Video", ko: "식전영상 제작", desc: "예식 전 상영할 영상을 온라인 에디터로 손쉽게 제작할 수 있는 서비스입니다.", href: "https://prewedding-video-renderer-production.up.railway.app/editor", isNew: true },
+];
+
 const ITEMS: { key: Key; en: string; ko: string; desc: string; href: string; img: string }[] = [
   { key: "mc", en: "Wedding MC", ko: "결혼식 사회", desc: "사회자 18인 중, 예식에 맞는 한 사람", href: "https://inusmc.co.kr", img: "https://uyhtppjapcdmaekfixve.supabase.co/storage/v1/object/public/inusmusic-assets/AuYlivFZrjsDexsU.webp" },
   { key: "classic", en: "Classic", ko: "클래식 연주", desc: "공간의 격을 높이는 현악 · 피아노", href: "https://www.inusclassic.kr", img: "/images/service-classic.webp" },
@@ -19,6 +25,7 @@ export default function ServiceCrossNav({ current, background = "#0D0E12" }: { c
   const others = ITEMS.filter((i) => i.key !== current);
   return (
     <section
+      id="more-services"
       aria-labelledby="cross-nav-title"
       className="relative py-20 md:py-28"
       style={{ backgroundColor: background, borderTop: "1px solid rgba(201,169,110,0.14)" }}
@@ -79,6 +86,30 @@ export default function ServiceCrossNav({ current, background = "#0D0E12" }: { c
             패키지 자세히 보기 <ChevronRight size={15} className="transition-transform group-hover:translate-x-1" />
           </span>
         </a>
+
+        <div className="mt-10 md:mt-14">
+          <p className="text-center text-xs tracking-[0.3em] uppercase mb-4 md:mb-5" style={{ color: "#8A8B93" }}>함께 준비하면 좋은 서비스</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4 max-md:overflow-hidden max-md:rounded-xl max-md:border max-md:border-[#2A2B32] max-md:divide-y max-md:divide-[#2A2B32]">
+            {EXTRAS.map((x) => (
+              <a
+                key={x.en}
+                href={x.href}
+                {...(x.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="group flex items-start justify-between gap-4 bg-[#141519] px-4 py-3.5 md:rounded-xl md:border md:border-[#2A2B32] md:px-5 md:py-5 transition-colors md:hover:border-[#C9A96E]/40"
+              >
+                <div className="min-w-0">
+                  <p className="hidden md:block text-xs tracking-[0.2em] uppercase mb-1.5" style={{ color: "#C9A96E", fontFamily: "'Cormorant Garamond', serif", fontWeight: 700 }}>{x.en}</p>
+                  <p className="flex items-center gap-2 text-base font-semibold" style={{ fontFamily: "'Noto Serif KR', serif", color: "#F0EFE9" }}>
+                    {x.ko}
+                    {x.isNew && <span className="rounded-full px-1.5 py-0.5 text-[9px] font-bold tracking-wide leading-none" style={{ backgroundColor: "rgba(201,169,110,0.2)", color: "#C9A96E" }}>NEW</span>}
+                  </p>
+                  <p className="mt-1 md:mt-2 text-xs leading-relaxed break-keep text-pretty" style={{ color: "#8A8B93", wordBreak: "keep-all" }}>{x.desc}</p>
+                </div>
+                <ChevronRight size={15} className="mt-1 shrink-0 transition-transform group-hover:translate-x-1" style={{ color: "#5BB5A2" }} />
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

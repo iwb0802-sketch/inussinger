@@ -2189,43 +2189,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══ ADDITIONAL OPTIONS (Light Section) ═══ */}
-      <section id="additional-options" className="py-16 md:py-24 bg-[#f8f6f3]">
-        <div className="container max-w-4xl mx-auto">
-          <AnimatedSection>
-            <SectionLabel en="ADDITIONAL OPTIONS" />
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 text-center mb-3" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-              추가옵션
-            </h2>
-            <p className="text-gray-500 text-center text-xs md:text-sm mb-8 md:mb-10 leading-relaxed break-keep">
-              축가에 더해 예식 준비를 덜어 드리는 옵션입니다.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.1}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
-              {[
-                { title: "모바일 청첩장", href: "https://inuscard.com/" },
-                { title: "음원 편집", href: "https://www.inusmusic.com/audio" },
-                { title: "식전영상 제작", href: "https://prewedding-video-renderer-production.up.railway.app/editor" },
-                { title: "완성 패키지", href: LINKS.package },
-              ].map((item, i) => (
-                <a
-                  key={i}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-5 md:p-6 rounded-xl bg-white border border-gray-100 hover:shadow-lg transition-all duration-300 group"
-                >
-                  <span className="text-sm md:text-base font-semibold text-gray-900 group-hover:text-gray-700 whitespace-nowrap">{item.title}</span>
-                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
-                </a>
-              ))}
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
       <ServiceCrossNav current="singer" background="#111111" />
 
       {/* ═══ FOOTER ═══ */}
